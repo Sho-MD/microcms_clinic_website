@@ -1,20 +1,26 @@
 import { createClient, MicroCMSQueries } from 'microcms-js-sdk';
 
-const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN;
-const apiKey = process.env.MICROCMS_API_KEY;
+/**
+ * MicroCMSクライアントを取得する
+ * 環境変数が設定されていない場合はエラーを投げる
+ */
+function getClient() {
+  const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN;
+  const apiKey = process.env.MICROCMS_API_KEY;
 
-if (!serviceDomain) {
-  throw new Error('MICROCMS_SERVICE_DOMAIN is not defined in the environment variables.');
+  if (!serviceDomain) {
+    throw new Error('MICROCMS_SERVICE_DOMAIN is not defined in the environment variables.');
+  }
+
+  if (!apiKey) {
+    throw new Error('MICROCMS_API_KEY is not defined in the environment variables.');
+  }
+
+  return createClient({
+    serviceDomain,
+    apiKey,
+  });
 }
-
-if (!apiKey) {
-  throw new Error('MICROCMS_API_KEY is not defined in the environment variables.');
-}
-
-const client = createClient({
-  serviceDomain,
-  apiKey,
-});
 
 export type ClinicInfo = {
   id: string;
@@ -70,6 +76,7 @@ export type ClinicInfo = {
 };
 
 export async function fetchClinicInfo(queries?: MicroCMSQueries): Promise<ClinicInfo> {
+  const client = getClient();
   return client.get<ClinicInfo>({
     endpoint: 'information',
     queries,
