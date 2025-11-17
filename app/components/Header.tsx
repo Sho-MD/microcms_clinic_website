@@ -30,6 +30,11 @@ export default function Header() {
               </Link>
             </li>
             <li>
+              <Link href="/doctor" className="text-gray-700 hover:text-blue-900 transition">
+                医師紹介
+              </Link>
+            </li>
+            <li>
               <Link href="/access" className="text-gray-700 hover:text-blue-900 transition">
                 アクセス
               </Link>

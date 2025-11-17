@@ -23,11 +23,19 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h4 className="text-lg font-semibold mb-4">お問い合わせ</h4>
-            <p className="text-gray-400">
-              予約・お問い合わせは<br />
-              お電話またはWEB予約をご利用ください
-            </p>
+            <h4 className="text-lg font-semibold mb-4">リンク</h4>
+            <ul className="space-y-2 text-gray-400">
+              <li>
+                <Link href="/doctor" className="hover:text-white transition">
+                  医師紹介
+                </Link>
+              </li>
+              <li>
+                <Link href="/access" className="hover:text-white transition">
+                  アクセス
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
