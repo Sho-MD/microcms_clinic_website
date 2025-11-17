@@ -1,17 +1,23 @@
 import { fetchClinicInfo } from '../microcms';
 import Link from 'next/link';
+import { FieldDisplay } from './components/FieldDisplay';
 
 export default async function Home() {
   const clinicInfo = await fetchClinicInfo();
 
-  const clinicName = clinicInfo.name as string || 
-                    clinicInfo.clinicName as string || 
-                    clinicInfo['医院名'] as string || 
-                    'せき専門外来';
-  
-  const catchCopy = clinicInfo.catchCopy as string || 
-                   clinicInfo['キャッチコピー'] as string || 
-                   'ラジオロジークリニック併設 | X線・CT検査とリアルタイム読影が可能';
+  // MicroCMSのフィールドIDを直接使用（複数の候補を試す）
+  const getFieldValue = (fieldIds: string[], defaultValue: string = '') => {
+    for (const fieldId of fieldIds) {
+      const value = clinicInfo[fieldId];
+      if (value && typeof value === 'string' && value.trim() !== '') {
+        return value;
+      }
+    }
+    return defaultValue;
+  };
+
+  const clinicName = getFieldValue(['name', 'clinicName', '医院名', 'clinic_name'], 'せき専門外来');
+  const catchCopy = getFieldValue(['catchCopy', 'キャッチコピー', 'catch_copy'], 'ラジオロジークリニック併設 | X線・CT検査とリアルタイム読影が可能');
 
   return (
     <main className="min-h-screen">
@@ -47,35 +53,51 @@ export default async function Home() {
           <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
             当院の特徴
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-blue-50 p-6 rounded-lg">
-              <div className="text-4xl mb-4">🏥</div>
-              <h3 className="text-xl font-bold text-blue-900 mb-3">
-                ラジオロジークリニック併設
-              </h3>
-              <p className="text-gray-700">
-                当院はラジオロジークリニックの一区画として併設されており、X線やCT検査をすぐに実施できます。
-              </p>
+          {/* MicroCMSの特徴フィールドがあれば表示、なければデフォルト表示 */}
+          {(clinicInfo.features || clinicInfo['特徴'] || clinicInfo['features']) ? (
+            <div className="grid md:grid-cols-3 gap-8">
+              {((clinicInfo.features || clinicInfo['特徴'] || clinicInfo['features']) as any[])?.map((feature: any, index: number) => (
+                <div key={index} className="bg-blue-50 p-6 rounded-lg">
+                  <h3 className="text-xl font-bold text-blue-900 mb-3">
+                    {feature.title || feature['タイトル'] || feature['title'] || `特徴 ${index + 1}`}
+                  </h3>
+                  <p className="text-gray-700">
+                    {feature.description || feature['説明'] || feature['description'] || ''}
+                  </p>
+                </div>
+              ))}
             </div>
-            <div className="bg-blue-50 p-6 rounded-lg">
-              <div className="text-4xl mb-4">👨‍⚕️</div>
-              <h3 className="text-xl font-bold text-blue-900 mb-3">
-                リアルタイム読影
-              </h3>
-              <p className="text-gray-700">
-                放射線科専門医がリアルタイムで読影を行うため、迅速かつ正確な診断が可能です。
-              </p>
+          ) : (
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="bg-blue-50 p-6 rounded-lg">
+                <div className="text-4xl mb-4">🏥</div>
+                <h3 className="text-xl font-bold text-blue-900 mb-3">
+                  ラジオロジークリニック併設
+                </h3>
+                <p className="text-gray-700">
+                  当院はラジオロジークリニックの一区画として併設されており、X線やCT検査をすぐに実施できます。
+                </p>
+              </div>
+              <div className="bg-blue-50 p-6 rounded-lg">
+                <div className="text-4xl mb-4">👨‍⚕️</div>
+                <h3 className="text-xl font-bold text-blue-900 mb-3">
+                  リアルタイム読影
+                </h3>
+                <p className="text-gray-700">
+                  放射線科専門医がリアルタイムで読影を行うため、迅速かつ正確な診断が可能です。
+                </p>
+              </div>
+              <div className="bg-blue-50 p-6 rounded-lg">
+                <div className="text-4xl mb-4">🫁</div>
+                <h3 className="text-xl font-bold text-blue-900 mb-3">
+                  呼吸器内科専門医
+                </h3>
+                <p className="text-gray-700">
+                  呼吸器内科専門医が、せきに関わる様々な疾患を専門的に診療いたします。
+                </p>
+              </div>
             </div>
-            <div className="bg-blue-50 p-6 rounded-lg">
-              <div className="text-4xl mb-4">🫁</div>
-              <h3 className="text-xl font-bold text-blue-900 mb-3">
-                呼吸器内科専門医
-              </h3>
-              <p className="text-gray-700">
-                呼吸器内科専門医が、せきに関わる様々な疾患を専門的に診療いたします。
-              </p>
-            </div>
-          </div>
+          )}
         </div>
       </section>
 
@@ -85,40 +107,53 @@ export default async function Home() {
           <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
             診療内容
           </h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-2xl font-bold text-blue-900 mb-3">
-                非結核性抗酸菌症
-              </h3>
-              <p className="text-gray-700">
-                結核菌以外の抗酸菌による感染症です。長引く咳や痰、全身倦怠感などの症状が現れます。当院ではCT検査とリアルタイム読影により、早期発見・適切な治療を行います。
-              </p>
+          {/* MicroCMSの診療内容フィールドがあれば表示、なければデフォルト表示 */}
+          {(clinicInfo.treatments || clinicInfo['診療内容'] || clinicInfo['treatments']) ? (
+            <div className="grid md:grid-cols-2 gap-6">
+              {((clinicInfo.treatments || clinicInfo['診療内容'] || clinicInfo['treatments']) as string[])?.map((treatment: string, index: number) => (
+                <div key={index} className="bg-white p-6 rounded-lg shadow-sm">
+                  <h3 className="text-2xl font-bold text-blue-900 mb-3">
+                    {treatment}
+                  </h3>
+                </div>
+              ))}
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-2xl font-bold text-blue-900 mb-3">
-                喘息
-              </h3>
-              <p className="text-gray-700">
-                気道の慢性的な炎症により、咳や喘鳴、呼吸困難が起こる疾患です。適切な診断と治療により、症状をコントロールし、日常生活を快適に過ごせます。
-              </p>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h3 className="text-2xl font-bold text-blue-900 mb-3">
+                  非結核性抗酸菌症
+                </h3>
+                <p className="text-gray-700">
+                  結核菌以外の抗酸菌による感染症です。長引く咳や痰、全身倦怠感などの症状が現れます。当院ではCT検査とリアルタイム読影により、早期発見・適切な治療を行います。
+                </p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h3 className="text-2xl font-bold text-blue-900 mb-3">
+                  喘息
+                </h3>
+                <p className="text-gray-700">
+                  気道の慢性的な炎症により、咳や喘鳴、呼吸困難が起こる疾患です。適切な診断と治療により、症状をコントロールし、日常生活を快適に過ごせます。
+                </p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h3 className="text-2xl font-bold text-blue-900 mb-3">
+                  COPD（慢性閉塞性肺疾患）
+                </h3>
+                <p className="text-gray-700">
+                  主に喫煙が原因で、肺の機能が低下する疾患です。長引く咳や息切れが特徴的です。早期発見と適切な治療により、進行を抑えることができます。
+                </p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h3 className="text-2xl font-bold text-blue-900 mb-3">
+                  その他せきに関わる疾患
+                </h3>
+                <p className="text-gray-700">
+                  咳喘息、アトピー性咳嗽、感染後咳嗽、逆流性食道炎など、長引く咳の原因となる様々な疾患を診療いたします。
+                </p>
+              </div>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-2xl font-bold text-blue-900 mb-3">
-                COPD（慢性閉塞性肺疾患）
-              </h3>
-              <p className="text-gray-700">
-                主に喫煙が原因で、肺の機能が低下する疾患です。長引く咳や息切れが特徴的です。早期発見と適切な治療により、進行を抑えることができます。
-              </p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-2xl font-bold text-blue-900 mb-3">
-                その他せきに関わる疾患
-              </h3>
-              <p className="text-gray-700">
-                咳喘息、アトピー性咳嗽、感染後咳嗽、逆流性食道炎など、長引く咳の原因となる様々な疾患を診療いたします。
-              </p>
-            </div>
-          </div>
+          )}
         </div>
       </section>
 

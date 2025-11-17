@@ -1,16 +1,27 @@
 import { fetchClinicInfo } from '../../microcms';
 import Link from 'next/link';
+import { FieldDisplay } from '../components/FieldDisplay';
 
 export default async function AccessPage() {
   const clinicInfo = await fetchClinicInfo();
 
-  const address = clinicInfo.address as string || 
-                 clinicInfo['住所'] as string || 
-                 '住所情報を設定してください';
+  // MicroCMSのフィールドIDを直接使用（複数の候補を試す）
+  const getFieldValue = (fieldIds: string[], defaultValue: string = '') => {
+    for (const fieldId of fieldIds) {
+      const value = clinicInfo[fieldId];
+      if (value && typeof value === 'string' && value.trim() !== '') {
+        return value;
+      }
+    }
+    return defaultValue;
+  };
+
+  const address = getFieldValue(['address', '住所', 'address_1'], '住所情報を設定してください');
+  const phone = getFieldValue(['phone', '電話', 'tel', 'telephone'], '電話番号を設定してください');
   
-  const phone = clinicInfo.phone as string || 
-               clinicInfo['電話'] as string || 
-               '電話番号を設定してください';
+  // accessInstructionフィールド（マップ）の取得
+  const accessInstruction = clinicInfo.accessInstruction;
+  const accessInstructionHtml = typeof accessInstruction === 'string' ? accessInstruction : null;
 
   return (
     <main className="min-h-screen py-12 px-4">
@@ -33,6 +44,18 @@ export default async function AccessPage() {
                 <h3 className="font-bold text-blue-900 mb-2">電話番号</h3>
                 <p className="text-gray-700 text-xl">{phone}</p>
               </div>
+              {/* accessInstructionフィールド（マップ）の表示 */}
+              {accessInstructionHtml && (
+                <div className="mt-6">
+                  <h3 className="font-bold text-blue-900 mb-4">アクセス</h3>
+                  <div 
+                    className="w-full"
+                    dangerouslySetInnerHTML={{ 
+                      __html: accessInstructionHtml
+                    }}
+                  />
+                </div>
+              )}
               <div className="bg-blue-50 p-4 rounded">
                 <p className="text-sm text-gray-700">
                   <strong>ご注意</strong>：当院はラジオロジークリニックの一区画として併設されています。
@@ -68,7 +91,10 @@ export default async function AccessPage() {
                   <td className="border border-gray-300 px-4 py-3 text-center">●</td>
                   <td className="border border-gray-300 px-4 py-3 text-center">／</td>
                   <td className="border border-gray-300 px-4 py-3 text-center">●</td>
-                  <td className="border border-gray-300 px-4 py-3 text-center">▲</td>
+                  <td className="border border-gray-300 px-4 py-3 text-center">
+                    <span className="text-blue-900 font-semibold">▲</span>
+                    <span className="text-xs block text-red-600 mt-1">完全予約制</span>
+                  </td>
                   <td className="border border-gray-300 px-4 py-3 text-center">／</td>
                 </tr>
                 <tr>
@@ -83,10 +109,12 @@ export default async function AccessPage() {
                 </tr>
               </tbody>
             </table>
-            <p className="mt-4 text-sm text-gray-600">
-              ▲土曜：9:00〜13:00<br />
-              休診日：木曜・土曜午後・日祝日
-            </p>
+            <div className="mt-4 space-y-2 text-sm text-gray-600">
+              <p>
+                <span className="font-semibold">▲</span> 土曜：9:00〜13:00（<span className="text-red-600 font-semibold">完全予約制</span>）
+              </p>
+              <p>休診日：木曜・土曜午後・日祝日</p>
+            </div>
           </div>
         </section>
 
