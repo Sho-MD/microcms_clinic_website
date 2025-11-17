@@ -26,7 +26,7 @@ export default async function AccessPage() {
   return (
     <main className="min-h-screen py-12 px-4">
       <div className="container mx-auto max-w-4xl">
-        <h1 className="text-4xl md:text-5xl font-bold text-blue-900 mb-8 text-center">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue-900 mb-6 md:mb-8 text-center px-2">
           アクセス
         </h1>
 
@@ -69,43 +69,43 @@ export default async function AccessPage() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
             診療時間
           </h2>
-          <div className="bg-white p-6 rounded-lg shadow-sm overflow-x-auto">
-            <table className="w-full border-collapse">
+          <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm overflow-x-auto">
+            <table className="w-full border-collapse text-sm sm:text-base">
               <thead>
                 <tr className="bg-blue-900 text-white">
-                  <th className="border border-gray-300 px-4 py-3">診療時間</th>
-                  <th className="border border-gray-300 px-4 py-3">月</th>
-                  <th className="border border-gray-300 px-4 py-3">火</th>
-                  <th className="border border-gray-300 px-4 py-3">水</th>
-                  <th className="border border-gray-300 px-4 py-3">木</th>
-                  <th className="border border-gray-300 px-4 py-3">金</th>
-                  <th className="border border-gray-300 px-4 py-3">土</th>
-                  <th className="border border-gray-300 px-4 py-3">日/祝</th>
+                  <th className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">診療時間</th>
+                  <th className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">月</th>
+                  <th className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">火</th>
+                  <th className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">水</th>
+                  <th className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">木</th>
+                  <th className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">金</th>
+                  <th className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">土</th>
+                  <th className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm">日/祝</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className="border border-gray-300 px-4 py-3 font-semibold">09:00～12:30</td>
-                  <td className="border border-gray-300 px-4 py-3 text-center">●</td>
-                  <td className="border border-gray-300 px-4 py-3 text-center">●</td>
-                  <td className="border border-gray-300 px-4 py-3 text-center">●</td>
-                  <td className="border border-gray-300 px-4 py-3 text-center">／</td>
-                  <td className="border border-gray-300 px-4 py-3 text-center">●</td>
-                  <td className="border border-gray-300 px-4 py-3 text-center">
+                  <td className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 font-semibold text-xs sm:text-sm">09:00～12:30</td>
+                  <td className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-center">●</td>
+                  <td className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-center">●</td>
+                  <td className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-center">●</td>
+                  <td className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-center">／</td>
+                  <td className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-center">●</td>
+                  <td className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-center">
                     <span className="text-blue-900 font-semibold">▲</span>
                     <span className="text-xs block text-red-600 mt-1">完全予約制</span>
                   </td>
-                  <td className="border border-gray-300 px-4 py-3 text-center">／</td>
+                  <td className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-center">／</td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-300 px-4 py-3 font-semibold">16:00〜19:00</td>
-                  <td className="border border-gray-300 px-4 py-3 text-center">●</td>
-                  <td className="border border-gray-300 px-4 py-3 text-center">●</td>
-                  <td className="border border-gray-300 px-4 py-3 text-center">●</td>
-                  <td className="border border-gray-300 px-4 py-3 text-center">／</td>
-                  <td className="border border-gray-300 px-4 py-3 text-center">●</td>
-                  <td className="border border-gray-300 px-4 py-3 text-center">／</td>
-                  <td className="border border-gray-300 px-4 py-3 text-center">／</td>
+                  <td className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 font-semibold text-xs sm:text-sm">16:00〜19:00</td>
+                  <td className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-center">●</td>
+                  <td className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-center">●</td>
+                  <td className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-center">●</td>
+                  <td className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-center">／</td>
+                  <td className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-center">●</td>
+                  <td className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-center">／</td>
+                  <td className="border border-gray-300 px-2 sm:px-4 py-2 sm:py-3 text-center">／</td>
                 </tr>
               </tbody>
             </table>

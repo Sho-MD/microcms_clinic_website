@@ -7,12 +7,12 @@ export default async function AboutPage() {
   return (
     <main className="min-h-screen py-12 px-4">
       <div className="container mx-auto max-w-4xl">
-        <h1 className="text-4xl md:text-5xl font-bold text-blue-900 mb-8 text-center">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue-900 mb-6 md:mb-8 text-center px-2">
           せき専門外来について
         </h1>
 
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">
+        <section className="mb-8 md:mb-12">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
             長引く咳（せき）について
           </h2>
           <div className="bg-blue-50 p-6 rounded-lg mb-6">

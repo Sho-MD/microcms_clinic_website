@@ -72,25 +72,25 @@ export default async function DoctorPage() {
           <div className="md:flex">
             {/* 医師写真 */}
             {doctorPhotoUrl && (
-              <div className="md:w-1/3 bg-gray-100 flex items-center justify-center p-6">
-                <div className="relative w-64 h-64 md:w-full md:h-auto md:aspect-square">
+              <div className="md:w-1/3 bg-gray-100 flex items-center justify-center p-4 md:p-6">
+                <div className="relative w-full max-w-xs h-64 sm:h-80 md:w-full md:h-auto md:aspect-square mx-auto">
                   <Image
                     src={doctorPhotoUrl}
                     alt={`${doctorName} ${doctorTitle}`}
                     fill
                     className="object-cover rounded-lg"
-                    sizes="(max-width: 768px) 256px, 33vw"
+                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 320px, 33vw"
                   />
                 </div>
               </div>
             )}
             
             {/* 医師情報 */}
-            <div className={`${doctorPhotoUrl ? 'md:w-2/3' : 'w-full'} p-8`}>
-              <h2 className="text-3xl font-bold text-blue-900 mb-2">
+            <div className={`${doctorPhotoUrl ? 'md:w-2/3' : 'w-full'} p-4 sm:p-6 md:p-8`}>
+              <h2 className="text-2xl sm:text-3xl font-bold text-blue-900 mb-2">
                 {doctorName}
               </h2>
-              <p className="text-xl text-gray-600 mb-4">
+              <p className="text-lg sm:text-xl text-gray-600 mb-4">
                 {doctorTitle} | {specialty}
               </p>
               

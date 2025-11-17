@@ -22,24 +22,24 @@ export default async function Home() {
   return (
     <main className="min-h-screen">
       {/* ヒーローセクション */}
-      <section className="bg-gradient-to-br from-blue-50 to-white py-20 px-4">
+      <section className="bg-gradient-to-br from-blue-50 to-white py-12 md:py-20 px-4">
         <div className="container mx-auto max-w-4xl text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-blue-900 mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-blue-900 mb-4 md:mb-6">
             {clinicName}
           </h1>
-          <p className="text-xl md:text-2xl text-gray-700 mb-8">
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 mb-6 md:mb-8 px-2">
             {catchCopy}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-2">
             <Link 
               href="/about" 
-              className="bg-blue-900 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-800 transition"
+              className="bg-blue-900 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-blue-800 transition text-sm sm:text-base"
             >
               せき専門外来について
             </Link>
             <Link 
               href="/examination" 
-              className="bg-white text-blue-900 border-2 border-blue-900 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition"
+              className="bg-white text-blue-900 border-2 border-blue-900 px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-blue-50 transition text-sm sm:text-base"
             >
               検査について
             </Link>
@@ -48,9 +48,9 @@ export default async function Home() {
       </section>
 
       {/* 特徴セクション */}
-      <section className="py-16 px-4 bg-white">
+      <section className="py-12 md:py-16 px-4 bg-white">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-8 md:mb-12">
             当院の特徴
           </h2>
           {/* MicroCMSの特徴フィールドがあれば表示、なければデフォルト表示 */}
@@ -102,9 +102,9 @@ export default async function Home() {
       </section>
 
       {/* 診療内容セクション */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className="py-12 md:py-16 px-4 bg-gray-50">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-8 md:mb-12">
             診療内容
           </h2>
           {/* MicroCMSの診療内容フィールドがあれば表示、なければデフォルト表示 */}
@@ -158,9 +158,9 @@ export default async function Home() {
       </section>
 
       {/* 検査についてセクション */}
-      <section className="py-16 px-4 bg-white">
+      <section className="py-12 md:py-16 px-4 bg-white">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-8 md:mb-12">
             検査について
           </h2>
           <div className="max-w-3xl mx-auto space-y-6">
@@ -201,18 +201,18 @@ export default async function Home() {
       </section>
 
       {/* CTAセクション */}
-      <section className="py-16 px-4 bg-blue-900 text-white">
+      <section className="py-12 md:py-16 px-4 bg-blue-900 text-white">
         <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 md:mb-6">
             長引く咳でお悩みの方へ
           </h2>
-          <p className="text-xl mb-8 text-blue-100">
-            咳が2週間以上続く場合は、早めの受診をお勧めします。<br />
-            当院では専門的な検査と診断により、適切な治療をご提案いたします。
+          <p className="text-base sm:text-lg md:text-xl mb-6 md:mb-8 text-blue-100 px-2">
+            咳が2週間以上続く場合は、早めの受診をお勧めします。<br className="hidden sm:block" />
+            <span className="sm:hidden"> </span>当院では専門的な検査と診断により、適切な治療をご提案いたします。
           </p>
           <Link 
             href="/about" 
-            className="bg-white text-blue-900 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition inline-block"
+            className="bg-white text-blue-900 px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-blue-50 transition inline-block text-sm sm:text-base"
           >
             せき専門外来について詳しく見る
           </Link>
