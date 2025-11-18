@@ -360,9 +360,6 @@ export default async function Home() {
               </p>
               <p>ラジオロジークリニック扇町 内区画で診療しています。</p>
             </div>
-            <div className="mt-6 text-sm text-slate-600">
-              <FieldDisplay data={clinicInfo} fieldId="accessInstruction" label="アクセス案内（microCMS）" />
-            </div>
           </div>
           <div className="rounded-3xl border border-slate-100 bg-slate-50 p-4">
             <div className="h-72 w-full overflow-hidden rounded-2xl bg-white">

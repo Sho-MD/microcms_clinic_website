@@ -37,11 +37,20 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
       ? news.category.name
       : null;
 
-  const contentHtml =
-    (typeof news.content === 'string' && news.content) ||
-    (typeof news.body === 'string' && news.body) ||
-    (typeof news.description === 'string' && `<p>${news.description}</p>`) ||
-    '';
+  // contentフィールドの取得（複数の形式に対応）
+  let contentHtml = '';
+  
+  if (typeof news.content === 'string' && news.content.trim()) {
+    contentHtml = news.content;
+  } else if (typeof news.body === 'string' && news.body.trim()) {
+    contentHtml = news.body;
+  } else if (typeof news.description === 'string' && news.description.trim()) {
+    contentHtml = `<p>${news.description}</p>`;
+  } else if (news.content && typeof news.content === 'object') {
+    // オブジェクト形式の場合（MicroCMSのリッチエディタのブロック構造など）
+    // とりあえず文字列化して表示
+    contentHtml = `<pre>${JSON.stringify(news.content, null, 2)}</pre>`;
+  }
 
   return (
     <main className="min-h-screen bg-white">
