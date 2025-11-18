@@ -117,7 +117,8 @@ export type NewsItem = {
   body?: string;
   summary?: string;
   description?: string;
-  category?: {
+  date?: string; // APIスキーマのdateフィールド
+  category?: string | {
     id: string;
     name?: string;
   } | null;

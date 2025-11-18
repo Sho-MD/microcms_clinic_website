@@ -256,29 +256,54 @@ export default async function Home() {
               </div>
             ) : (
               newsItems.map((item) => {
-                const displayDate = item.publishedAt
-                  ? new Date(item.publishedAt).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' })
+                // 日付の取得（dateフィールド優先、なければpublishedAt）
+                const dateValue = item.date || item.publishedAt;
+                const displayDate = dateValue
+                  ? new Date(dateValue).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' })
                   : '';
-                const summary =
-                  item.summary ||
-                  item.description ||
-                  (typeof item.content === 'string' ? item.content.replace(/<[^>]+>/g, '').slice(0, 80) : '') ||
-                  (typeof item.body === 'string' ? item.body.replace(/<[^>]+>/g, '').slice(0, 80) : '');
+                
+                // カテゴリーの取得
+                const categoryName = typeof item.category === 'string' 
+                  ? item.category 
+                  : (item.category && typeof item.category === 'object' && 'name' in item.category)
+                    ? item.category.name
+                    : null;
+                
+                // contentの全文を取得
+                const fullContent = typeof item.content === 'string' ? item.content : '';
+                const plainTextContent = fullContent.replace(/<[^>]+>/g, '');
+                
+                // 要約（80文字まで）
+                const summary = plainTextContent.slice(0, 80);
+                const isTruncated = plainTextContent.length > 80;
+                
                 return (
                   <div key={item.id} className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                    <p className="text-xs font-semibold text-sky-600">{displayDate || '公開日未定'}</p>
-                    <h3 className="mt-1 text-base font-semibold text-slate-900">{item.title ?? 'お知らせ'}</h3>
+                    <div className="flex items-center gap-3 mb-2">
+                      {displayDate && (
+                        <p className="text-xs font-semibold text-sky-600">{displayDate}</p>
+                      )}
+                      {categoryName && (
+                        <span className="text-xs px-2 py-1 rounded-full bg-sky-100 text-sky-700 font-medium">
+                          {categoryName}
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="text-base font-semibold text-slate-900">{item.title ?? 'お知らせ'}</h3>
                     <p className="mt-2 text-sm text-slate-600">
                       {summary || '詳細は本文をご確認ください。'}
+                      {isTruncated && '…'}
                     </p>
-                    <div className="mt-4">
-                      <Link
-                        href={`/news/${item.id}`}
-                        className="text-sm font-semibold text-sky-600 hover:text-sky-700"
-                      >
-                        詳細を見る →
-                      </Link>
-                    </div>
+                    {isTruncated && (
+                      <div className="mt-4">
+                        <Link
+                          href={`/news/${item.id}`}
+                          className="text-sm font-semibold text-sky-600 hover:text-sky-700"
+                        >
+                          詳細を見る →
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 );
               })
@@ -341,11 +366,30 @@ export default async function Home() {
           </div>
           <div className="rounded-3xl border border-slate-100 bg-slate-50 p-4">
             <div className="h-72 w-full overflow-hidden rounded-2xl bg-white">
-              <FieldDisplay data={clinicInfo} fieldId="map" label="map フィールドにGoogle Mapを追加" />
+              {(() => {
+                // accessInstructionフィールド（マップ埋め込み用HTML）を取得
+                const accessInstruction = clinicInfo.accessInstruction;
+                const accessInstructionHtml = typeof accessInstruction === 'string' ? accessInstruction : null;
+                
+                // mapフィールドも確認
+                const mapField = clinicInfo.map;
+                const mapHtml = typeof mapField === 'string' ? mapField : null;
+                
+                // どちらかがあれば表示
+                const mapContent = accessInstructionHtml || mapHtml;
+                
+                if (mapContent) {
+                  return (
+                    <div 
+                      className="w-full h-full"
+                      dangerouslySetInnerHTML={{ __html: mapContent }}
+                    />
+                  );
+                }
+                
+                return null;
+              })()}
             </div>
-            <p className="mt-4 text-xs text-slate-500">
-              map もしくは accessInstruction フィールドに埋め込みコードを設定すると表示されます。
-            </p>
           </div>
         </div>
       </section>

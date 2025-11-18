@@ -20,13 +20,22 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
     notFound();
   }
 
-  const displayDate = news.publishedAt
-    ? new Date(news.publishedAt).toLocaleDateString('ja-JP', {
+  // 日付の取得（dateフィールド優先、なければpublishedAt）
+  const dateValue = news.date || news.publishedAt;
+  const displayDate = dateValue
+    ? new Date(dateValue).toLocaleDateString('ja-JP', {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
       })
     : '';
+
+  // カテゴリーの取得
+  const categoryName = typeof news.category === 'string' 
+    ? news.category 
+    : (news.category && typeof news.category === 'object' && 'name' in news.category)
+      ? news.category.name
+      : null;
 
   const contentHtml =
     (typeof news.content === 'string' && news.content) ||
@@ -43,7 +52,16 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
             <h1 className="mt-3 text-3xl font-bold text-slate-900 sm:text-4xl">
               {news.title ?? 'お知らせ'}
             </h1>
-            <p className="mt-2 text-xs font-semibold text-slate-500">{displayDate}</p>
+            <div className="mt-2 flex items-center gap-3">
+              {displayDate && (
+                <p className="text-xs font-semibold text-slate-500">{displayDate}</p>
+              )}
+              {categoryName && (
+                <span className="text-xs px-2 py-1 rounded-full bg-sky-100 text-sky-700 font-medium">
+                  {categoryName}
+                </span>
+              )}
+            </div>
 
             {contentHtml ? (
               <div
