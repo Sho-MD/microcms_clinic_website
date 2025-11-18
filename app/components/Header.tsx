@@ -15,17 +15,17 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
+    <header className="bg-white/95 backdrop-blur-sm shadow-sm sticky top-0 z-50 border-b border-sky-100">
       <nav className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <Link href="/" className="text-xl md:text-2xl font-bold text-blue-900" onClick={closeMenu}>
+          <Link href="/" className="text-xl md:text-2xl font-bold text-sky-700 hover:text-sky-800 transition" onClick={closeMenu}>
             せき専門外来
           </Link>
           
           {/* ハンバーガーメニューボタン（モバイルのみ表示） */}
           <button
             onClick={toggleMenu}
-            className="md:hidden p-2 text-gray-700 hover:text-blue-900 focus:outline-none"
+            className="md:hidden p-2 text-slate-700 hover:text-sky-600 focus:outline-none"
             aria-label="メニューを開く"
           >
             {isMenuOpen ? (
@@ -42,32 +42,32 @@ export default function Header() {
           {/* デスクトップメニュー */}
           <ul className="hidden md:flex space-x-6">
             <li>
-              <Link href="/" className="text-gray-700 hover:text-blue-900 transition">
+              <Link href="/" className="text-slate-700 hover:text-sky-600 transition font-medium text-sm">
                 ホーム
               </Link>
             </li>
             <li>
-              <Link href="/about" className="text-gray-700 hover:text-blue-900 transition">
+              <Link href="/about" className="text-slate-700 hover:text-sky-600 transition font-medium text-sm">
                 せき専門外来について
               </Link>
             </li>
             <li>
-              <Link href="/treatment" className="text-gray-700 hover:text-blue-900 transition">
+              <Link href="/treatment" className="text-slate-700 hover:text-sky-600 transition font-medium text-sm">
                 診療内容
               </Link>
             </li>
             <li>
-              <Link href="/examination" className="text-gray-700 hover:text-blue-900 transition">
+              <Link href="/examination" className="text-slate-700 hover:text-sky-600 transition font-medium text-sm">
                 検査について
               </Link>
             </li>
             <li>
-              <Link href="/doctor" className="text-gray-700 hover:text-blue-900 transition">
+              <Link href="/doctor" className="text-slate-700 hover:text-sky-600 transition font-medium text-sm">
                 医師紹介
               </Link>
             </li>
             <li>
-              <Link href="/access" className="text-gray-700 hover:text-blue-900 transition">
+              <Link href="/access" className="text-slate-700 hover:text-sky-600 transition font-medium text-sm">
                 アクセス
               </Link>
             </li>
@@ -76,12 +76,12 @@ export default function Header() {
 
         {/* モバイルメニュー */}
         {isMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 border-t border-gray-200">
+          <div className="md:hidden mt-4 pb-4 border-t border-sky-100">
             <ul className="flex flex-col space-y-3 pt-4">
               <li>
                 <Link 
                   href="/" 
-                  className="block text-gray-700 hover:text-blue-900 transition py-2"
+                  className="block text-slate-700 hover:text-sky-600 transition py-2 font-medium"
                   onClick={closeMenu}
                 >
                   ホーム
@@ -90,7 +90,7 @@ export default function Header() {
               <li>
                 <Link 
                   href="/about" 
-                  className="block text-gray-700 hover:text-blue-900 transition py-2"
+                  className="block text-slate-700 hover:text-sky-600 transition py-2 font-medium"
                   onClick={closeMenu}
                 >
                   せき専門外来について
@@ -99,7 +99,7 @@ export default function Header() {
               <li>
                 <Link 
                   href="/treatment" 
-                  className="block text-gray-700 hover:text-blue-900 transition py-2"
+                  className="block text-slate-700 hover:text-sky-600 transition py-2 font-medium"
                   onClick={closeMenu}
                 >
                   診療内容
@@ -108,7 +108,7 @@ export default function Header() {
               <li>
                 <Link 
                   href="/examination" 
-                  className="block text-gray-700 hover:text-blue-900 transition py-2"
+                  className="block text-slate-700 hover:text-sky-600 transition py-2 font-medium"
                   onClick={closeMenu}
                 >
                   検査について
@@ -117,7 +117,7 @@ export default function Header() {
               <li>
                 <Link 
                   href="/doctor" 
-                  className="block text-gray-700 hover:text-blue-900 transition py-2"
+                  className="block text-slate-700 hover:text-sky-600 transition py-2 font-medium"
                   onClick={closeMenu}
                 >
                   医師紹介
@@ -126,7 +126,7 @@ export default function Header() {
               <li>
                 <Link 
                   href="/access" 
-                  className="block text-gray-700 hover:text-blue-900 transition py-2"
+                  className="block text-slate-700 hover:text-sky-600 transition py-2 font-medium"
                   onClick={closeMenu}
                 >
                   アクセス

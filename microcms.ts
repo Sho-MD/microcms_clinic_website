@@ -72,6 +72,29 @@ export type ClinicInfo = {
   住所?: string;
   phone?: string;
   電話?: string;
+  heroTitle?: string;
+  hero_kicker?: string;
+  heroKicker?: string;
+  heroDescription?: string;
+  reservationNote?: string;
+  heroImage?: unknown;
+  services?: Array<{
+    title?: string;
+    description?: string;
+  }>;
+  flow?: Array<{
+    title?: string;
+    description?: string;
+  }>;
+  news?: Array<{
+    title?: string;
+    date?: string;
+    description?: string;
+  }>;
+  faq?: Array<{
+    question?: string;
+    answer?: string;
+  }>;
   [field: string]: unknown;
 };
 

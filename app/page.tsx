@@ -1,223 +1,326 @@
 import { fetchClinicInfo } from '../microcms';
 import Link from 'next/link';
 import { FieldDisplay } from './components/FieldDisplay';
+import CMSImage from './components/CMSImage';
+
+const toArray = <T,>(value: T[] | string[] | undefined, fallback: T[] = []): T[] => {
+  if (!value) return fallback;
+  if (Array.isArray(value)) return value as T[];
+  return fallback;
+};
+
+const pickString = (record: Record<string, unknown>, keys: string[], fallback = '') => {
+  for (const key of keys) {
+    const value = record[key];
+    if (typeof value === 'string' && value.trim()) {
+      return value;
+    }
+  }
+  return fallback;
+};
 
 export default async function Home() {
   const clinicInfo = await fetchClinicInfo();
 
-  // MicroCMSのフィールドIDを直接使用（複数の候補を試す）
-  const getFieldValue = (fieldIds: string[], defaultValue: string = '') => {
-    for (const fieldId of fieldIds) {
-      const value = clinicInfo[fieldId];
-      if (value && typeof value === 'string' && value.trim() !== '') {
-        return value;
-      }
-    }
-    return defaultValue;
-  };
+  const clinicName = pickString(
+    clinicInfo,
+    ['heroTitle', 'hero_title', 'name', 'clinicName', '医院名'],
+    'せきとぜんそく専門外来'
+  );
+  const heroKicker = pickString(
+    clinicInfo,
+    ['heroKicker', 'hero_kicker'],
+    'RADIOLOGY CLINIC ALLIANCE'
+  );
+  const heroDescription = pickString(
+    clinicInfo,
+    ['heroDescription', 'hero_description', 'catchCopy', 'キャッチコピー'],
+    'ラジオロジークリニック併設の強みを活かし、画像診断と呼吸器診療を同じ空間で完結させます。'
+  );
+  const reservationNote = pickString(
+    clinicInfo,
+    ['reservationNote', '予約案内'],
+    '現在は土曜日のみ完全予約制で診療しています。平日は準備中のため、最新情報は当サイトでご確認ください。'
+  );
+  const heroImage = clinicInfo.heroImage || clinicInfo['hero_image'] || clinicInfo['ヒーロー画像'];
 
-  const clinicName = getFieldValue(['name', 'clinicName', '医院名', 'clinic_name'], 'せき専門外来');
-  const catchCopy = getFieldValue(['catchCopy', 'キャッチコピー', 'catch_copy'], 'ラジオロジークリニック併設 | X線・CT検査とリアルタイム読影が可能');
+  const services = toArray<any>(
+    (clinicInfo.services || clinicInfo['診療メニュー']) as any[],
+    [
+      { title: '非結核性抗酸菌症', description: 'CT・MRIによる詳細評価と個別治療。' },
+      { title: '咳喘息・喘息', description: '専門医による吸入治療と生活指導。' },
+      { title: 'COPDケア', description: '呼吸リハビリと禁煙支援を組み合わせたプログラム。' },
+    ]
+  );
+
+  const flow = toArray<any>(
+    (clinicInfo.flow || clinicInfo['診療フロー']) as any[],
+    [
+      { title: '1. 完全予約制', description: '現在は土曜日のみ。予約フォーム準備中につき、お電話で受付。' },
+      { title: '2. 問診と検査', description: '症状ヒアリング後、必要に応じてCT/MRI・呼吸機能検査を行います。' },
+      { title: '3. 読影・診断', description: '放射線診断専門医が即時読影し、呼吸器専門医が診断。' },
+      { title: '4. 治療とフォロー', description: '薬物治療とセルフケア指導を行い、再発を防ぎます。' },
+    ]
+  );
+
+  const news = toArray<any>(
+    (clinicInfo.news || clinicInfo['お知らせ']) as any[],
+    [
+      { title: '土曜予約のお知らせ', date: '2025-01-15', description: '完全予約制のため、お電話でご希望時間をご相談ください。' },
+      { title: '平日診療の準備', date: '2024-12-01', description: '平日診療再開に向け準備を進めています。続報をお待ちください。' },
+    ]
+  );
+
+  const faq = toArray<any>(
+    (clinicInfo.faq || clinicInfo['FAQ']) as any[],
+    [
+      { question: '予約方法は？', answer: '現在は土曜日のみです。お電話で日程をご相談ください。WEB予約は準備中です。' },
+      { question: '画像検査は同日に受けられますか？', answer: 'ラジオロジークリニック併設のため、原則同日に撮影と読影を完了できます。' },
+    ]
+  );
+
+  const doctorMessage = pickString(
+    clinicInfo,
+    ['doctorIntroduction', 'doctor_intro', 'doctor_message', 'message'],
+    '呼吸器内科専門医・満屋 奨が、長引く咳やぜんそくの悩みに寄り添います。'
+  );
+
+  const address = pickString(clinicInfo, ['address', '住所'], '大阪府大阪市北区...');
+  const phone = pickString(clinicInfo, ['phone', '電話'], '06-XXXX-XXXX');
 
   return (
-    <main className="min-h-screen">
-      {/* ヒーローセクション */}
-      <section className="bg-gradient-to-br from-blue-50 to-white py-12 md:py-20 px-4">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-blue-900 mb-4 md:mb-6">
-            {clinicName}
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 mb-6 md:mb-8 px-2">
-            {catchCopy}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-2">
-            <Link 
-              href="/about" 
-              className="bg-blue-900 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-blue-800 transition text-sm sm:text-base"
-            >
-              せき専門外来について
-            </Link>
-            <Link 
-              href="/examination" 
-              className="bg-white text-blue-900 border-2 border-blue-900 px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-blue-50 transition text-sm sm:text-base"
-            >
-              検査について
-            </Link>
+    <main className="min-h-screen bg-white">
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-sky-50 via-white to-sky-100">
+        <div className="container mx-auto grid gap-10 px-4 py-12 md:grid-cols-2 md:items-center md:py-20">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.4em] text-sky-600">{heroKicker}</p>
+            <h1 className="mt-4 text-3xl font-bold text-slate-900 sm:text-4xl md:text-5xl lg:text-6xl">
+              {clinicName}
+            </h1>
+            <p className="mt-6 text-base leading-relaxed text-slate-600 sm:text-lg md:text-xl">
+              {heroDescription}
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/access"
+                className="rounded-full bg-sky-600 px-7 py-3 text-center text-sm font-semibold text-white shadow-md transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+              >
+                土曜の完全予約について
+              </Link>
+              <Link
+                href="/examination"
+                className="rounded-full border border-sky-200 px-7 py-3 text-center text-sm font-semibold text-sky-700 transition hover:border-sky-300 focus:outline-none focus:ring-2 focus:ring-sky-100 focus:ring-offset-2"
+              >
+                検査・読影の体制
+              </Link>
+            </div>
+            <p className="mt-5 text-xs text-slate-500">{reservationNote}</p>
+          </div>
+          <div className="relative h-72 w-full overflow-hidden rounded-3xl bg-slate-100 shadow-inner md:h-[420px]">
+            <CMSImage imageField={heroImage} alt="Hero" fieldName="heroImage" />
           </div>
         </div>
       </section>
 
-      {/* 特徴セクション */}
-      <section className="py-12 md:py-16 px-4 bg-white">
-        <div className="container mx-auto max-w-6xl">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-8 md:mb-12">
-            当院の特徴
-          </h2>
-          {/* MicroCMSの特徴フィールドがあれば表示、なければデフォルト表示 */}
-          {(clinicInfo.features || clinicInfo['特徴'] || clinicInfo['features']) ? (
-            <div className="grid md:grid-cols-3 gap-8">
-              {((clinicInfo.features || clinicInfo['特徴'] || clinicInfo['features']) as any[])?.map((feature: any, index: number) => (
-                <div key={index} className="bg-blue-50 p-6 rounded-lg">
-                  <h3 className="text-xl font-bold text-blue-900 mb-3">
-                    {feature.title || feature['タイトル'] || feature['title'] || `特徴 ${index + 1}`}
-                  </h3>
-                  <p className="text-gray-700">
-                    {feature.description || feature['説明'] || feature['description'] || ''}
+      {/* Ribbon */}
+      <section className="bg-sky-50">
+        <div className="container mx-auto px-4 py-6 text-center">
+          <span className="rounded-full bg-white px-5 py-2 text-xs font-semibold text-sky-700 shadow-sm">
+            平日は準備中 ／ 土曜日のみ完全予約制
+          </span>
+          <p className="mt-3 text-xs text-slate-500">予約フォーム公開まではお電話にて承ります。</p>
+        </div>
+      </section>
+
+      {/* Concept & Services */}
+      <section className="bg-white">
+        <div className="container mx-auto grid gap-10 px-4 py-12 md:grid-cols-2 md:items-start">
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">当院について</h2>
+            <p className="mt-4 text-sm leading-relaxed text-slate-600 md:text-base">
+              {pickString(
+                clinicInfo,
+                ['concept', 'コンセプト'],
+                '画像診断と呼吸器診療を同じ空間で完結させ、長引く咳に迅速に対応します。'
+              )}
+            </p>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-2xl border border-slate-100 bg-sky-50 p-4">
+                <p className="text-xs font-semibold text-sky-600">即日読影</p>
+                <p className="mt-2 text-sm text-slate-600">放射線診断専門医がその場で画像を解析し、診断までスムーズ。</p>
+              </div>
+              <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+                <p className="text-xs font-semibold text-sky-600">呼吸器内科専門</p>
+                <p className="mt-2 text-sm text-slate-600">呼吸器内科専門医・満屋 奨が長引く咳とぜんそくに特化して診療します。</p>
+              </div>
+            </div>
+          </div>
+          <div className="rounded-3xl border border-slate-100 bg-slate-50 p-6 shadow-inner">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">Services</p>
+            <div className="mt-4 space-y-4">
+              {services.map((service, index) => (
+                <div key={service.title ?? index} className="rounded-2xl bg-white p-4 shadow-sm">
+                  <p className="text-sm font-semibold text-slate-900">{service.title ?? `メニュー ${index + 1}`}</p>
+                  <p className="mt-2 text-xs text-slate-600">
+                    {service.description ?? 'microCMSの services フィールドに説明を追加してください。'}
                   </p>
                 </div>
               ))}
             </div>
-          ) : (
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="bg-blue-50 p-6 rounded-lg">
-                <div className="text-4xl mb-4">🏥</div>
-                <h3 className="text-xl font-bold text-blue-900 mb-3">
-                  ラジオロジークリニック併設
-                </h3>
-                <p className="text-gray-700">
-                  当院はラジオロジークリニックの一区画として併設されており、X線やCT検査をすぐに実施できます。
-                </p>
-              </div>
-              <div className="bg-blue-50 p-6 rounded-lg">
-                <div className="text-4xl mb-4">👨‍⚕️</div>
-                <h3 className="text-xl font-bold text-blue-900 mb-3">
-                  リアルタイム読影
-                </h3>
-                <p className="text-gray-700">
-                  放射線科専門医がリアルタイムで読影を行うため、迅速かつ正確な診断が可能です。
-                </p>
-              </div>
-              <div className="bg-blue-50 p-6 rounded-lg">
-                <div className="text-4xl mb-4">🫁</div>
-                <h3 className="text-xl font-bold text-blue-900 mb-3">
-                  呼吸器内科専門医
-                </h3>
-                <p className="text-gray-700">
-                  呼吸器内科専門医が、せきに関わる様々な疾患を専門的に診療いたします。
-                </p>
-              </div>
-            </div>
-          )}
+          </div>
         </div>
       </section>
 
-      {/* 診療内容セクション */}
-      <section className="py-12 md:py-16 px-4 bg-gray-50">
-        <div className="container mx-auto max-w-6xl">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-8 md:mb-12">
-            診療内容
-          </h2>
-          {/* MicroCMSの診療内容フィールドがあれば表示、なければデフォルト表示 */}
-          {(clinicInfo.treatments || clinicInfo['診療内容'] || clinicInfo['treatments']) ? (
-            <div className="grid md:grid-cols-2 gap-6">
-              {((clinicInfo.treatments || clinicInfo['診療内容'] || clinicInfo['treatments']) as string[])?.map((treatment: string, index: number) => (
-                <div key={index} className="bg-white p-6 rounded-lg shadow-sm">
-                  <h3 className="text-2xl font-bold text-blue-900 mb-3">
-                    {treatment}
-                  </h3>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white p-6 rounded-lg shadow-sm">
-                <h3 className="text-2xl font-bold text-blue-900 mb-3">
-                  非結核性抗酸菌症
-                </h3>
-                <p className="text-gray-700">
-                  結核菌以外の抗酸菌による感染症です。長引く咳や痰、全身倦怠感などの症状が現れます。当院ではCT検査とリアルタイム読影により、早期発見・適切な治療を行います。
+      {/* Flow */}
+      <section className="bg-sky-50">
+        <div className="container mx-auto px-4 py-12">
+          <div className="text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">Flow</p>
+            <h2 className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">診療の流れ</h2>
+          </div>
+          <div className="mt-8 grid gap-5 md:grid-cols-4">
+            {flow.map((step, index) => (
+              <div key={index} className="rounded-3xl bg-white p-5 shadow-sm">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-100 text-sm font-semibold text-sky-600">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <p className="mt-4 text-sm font-semibold text-slate-900">{step.title ?? `ステップ ${index + 1}`}</p>
+                <p className="mt-2 text-xs text-slate-600">
+                  {step.description ?? 'microCMSの flow フィールドに説明を入力してください。'}
                 </p>
               </div>
-              <div className="bg-white p-6 rounded-lg shadow-sm">
-                <h3 className="text-2xl font-bold text-blue-900 mb-3">
-                  喘息
-                </h3>
-                <p className="text-gray-700">
-                  気道の慢性的な炎症により、咳や喘鳴、呼吸困難が起こる疾患です。適切な診断と治療により、症状をコントロールし、日常生活を快適に過ごせます。
-                </p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-sm">
-                <h3 className="text-2xl font-bold text-blue-900 mb-3">
-                  COPD（慢性閉塞性肺疾患）
-                </h3>
-                <p className="text-gray-700">
-                  主に喫煙が原因で、肺の機能が低下する疾患です。長引く咳や息切れが特徴的です。早期発見と適切な治療により、進行を抑えることができます。
-                </p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-sm">
-                <h3 className="text-2xl font-bold text-blue-900 mb-3">
-                  その他せきに関わる疾患
-                </h3>
-                <p className="text-gray-700">
-                  咳喘息、アトピー性咳嗽、感染後咳嗽、逆流性食道炎など、長引く咳の原因となる様々な疾患を診療いたします。
-                </p>
-              </div>
-            </div>
-          )}
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* 検査についてセクション */}
-      <section className="py-12 md:py-16 px-4 bg-white">
-        <div className="container mx-auto max-w-6xl">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-8 md:mb-12">
-            検査について
-          </h2>
-          <div className="max-w-3xl mx-auto space-y-6">
-            <div className="bg-blue-50 p-6 rounded-lg">
-              <h3 className="text-xl font-bold text-blue-900 mb-3">
-                X線検査
-              </h3>
-              <p className="text-gray-700">
-                胸部X線検査により、肺や気管支の状態を確認します。被ばく量は極めて少なく、安全に検査が可能です。
-              </p>
-            </div>
-            <div className="bg-blue-50 p-6 rounded-lg">
-              <h3 className="text-xl font-bold text-blue-900 mb-3">
-                CT検査
-              </h3>
-              <p className="text-gray-700">
-                より詳細な画像診断が必要な場合、CT検査を実施します。当院ではすぐにCT検査が可能なため、迅速な診断ができます。
-              </p>
-            </div>
-            <div className="bg-blue-50 p-6 rounded-lg">
-              <h3 className="text-xl font-bold text-blue-900 mb-3">
-                リアルタイム読影
-              </h3>
-              <p className="text-gray-700">
-                放射線科専門医がリアルタイムで画像を読影するため、検査後すぐに結果をお伝えできます。迅速な診断により、早期治療が可能です。
-              </p>
-            </div>
-            <div className="text-center mt-8">
-              <Link 
-                href="/examination" 
-                className="text-blue-900 font-semibold hover:underline"
-              >
-                検査について詳しく見る →
-              </Link>
+      {/* Doctor */}
+      <section className="bg-white">
+        <div className="container mx-auto grid gap-10 px-4 py-12 md:grid-cols-2 md:items-center">
+          <div className="relative h-72 w-full overflow-hidden rounded-3xl bg-slate-100 shadow-inner md:h-96">
+            <CMSImage
+              imageField={clinicInfo.doctorPhoto || clinicInfo['医師写真']}
+              alt="医師写真"
+              fieldName="doctorPhoto"
+            />
+          </div>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">Doctor</p>
+            <h2 className="mt-3 text-2xl font-bold text-slate-900 sm:text-3xl">
+              {pickString(clinicInfo, ['doctorName', '医師名'], '満屋 奨')}
+            </h2>
+            <p className="text-xs text-slate-500">
+              {pickString(clinicInfo, ['doctorTitle', '役職'], '呼吸器内科専門医')}
+            </p>
+            <p className="mt-4 text-sm text-slate-600">{doctorMessage}</p>
+            <div className="mt-6 grid gap-4 text-sm text-slate-600 sm:grid-cols-2">
+              <FieldDisplay data={clinicInfo} fieldId="qualifications" label="資格（microCMS）" />
+              <FieldDisplay data={clinicInfo} fieldId="career" label="経歴（microCMS）" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTAセクション */}
-      <section className="py-12 md:py-16 px-4 bg-blue-900 text-white">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 md:mb-6">
-            長引く咳でお悩みの方へ
-          </h2>
-          <p className="text-base sm:text-lg md:text-xl mb-6 md:mb-8 text-blue-100 px-2">
-            咳が2週間以上続く場合は、早めの受診をお勧めします。<br className="hidden sm:block" />
-            <span className="sm:hidden"> </span>当院では専門的な検査と診断により、適切な治療をご提案いたします。
-          </p>
-          <Link 
-            href="/about" 
-            className="bg-white text-blue-900 px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-blue-50 transition inline-block text-sm sm:text-base"
-          >
-            せき専門外来について詳しく見る
-          </Link>
+      {/* Schedule */}
+      <section className="bg-sky-900 text-white">
+        <div className="container mx-auto px-4 py-12">
+          <div className="rounded-3xl border border-sky-200/30 bg-sky-800/70 p-8 shadow-lg">
+            <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-200">Schedule</p>
+                <h2 className="mt-2 text-2xl font-bold">診療日時</h2>
+                <p className="mt-3 text-sm text-sky-100">{reservationNote}</p>
+              </div>
+              <div className="rounded-2xl bg-white px-6 py-4 text-slate-900 shadow-sm">
+                <p className="text-xs font-semibold text-sky-600">現在の診療</p>
+                <p className="mt-2 text-lg font-bold">土曜 09:00 – 13:00（完全予約制）</p>
+                <p className="text-xs text-slate-500">最終受付 12:30 ／ 平日は準備中</p>
+              </div>
+            </div>
+            <div className="mt-6 border-t border-sky-700 pt-4 text-xs text-sky-200">
+              予約フォーム公開までは <span className="font-semibold text-white">{phone}</span> へご連絡ください。
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* News */}
+      <section className="bg-white">
+        <div className="container mx-auto px-4 py-12">
+          <div className="text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">News</p>
+            <h2 className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">お知らせ</h2>
+          </div>
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            {news.map((item, index) => (
+              <div key={index} className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
+                <p className="text-xs font-semibold text-sky-600">{item.date ?? 'YYYY-MM-DD'}</p>
+                <p className="mt-1 text-base font-semibold text-slate-900">{item.title ?? `お知らせ ${index + 1}`}</p>
+                <p className="mt-2 text-sm text-slate-600">
+                  {item.description ?? 'microCMSの news フィールドに本文を登録してください。'}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="bg-sky-50">
+        <div className="container mx-auto px-4 py-12">
+          <div className="text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">FAQ</p>
+            <h2 className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">よくある質問</h2>
+          </div>
+          <div className="mx-auto mt-8 max-w-3xl space-y-4">
+            {faq.map((item, index) => (
+              <details key={index} className="group rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-slate-900">
+                  {item.question ?? `質問 ${index + 1}`}
+                  <span className="text-sky-500 transition group-open:rotate-45">+</span>
+                </summary>
+                <p className="mt-3 text-sm text-slate-600">
+                  {item.answer ?? 'microCMSの faq フィールドに回答を入力してください。'}
+                </p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Access */}
+      <section className="bg-white">
+        <div className="container mx-auto grid gap-10 px-4 py-12 md:grid-cols-2">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">Access</p>
+            <h2 className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">アクセス</h2>
+            <div className="mt-6 space-y-3 text-sm text-slate-600">
+              <p>
+                <span className="font-semibold text-slate-900">所在地：</span>
+                {address}
+              </p>
+              <p>
+                <span className="font-semibold text-slate-900">電話：</span>
+                {phone}
+              </p>
+              <p>ラジオロジークリニック扇町 内区画で診療しています。</p>
+            </div>
+            <div className="mt-6 text-sm text-slate-600">
+              <FieldDisplay data={clinicInfo} fieldId="accessInstruction" label="アクセス案内（microCMS）" />
+            </div>
+          </div>
+          <div className="rounded-3xl border border-slate-100 bg-slate-50 p-4">
+            <div className="h-72 w-full overflow-hidden rounded-2xl bg-white">
+              <FieldDisplay data={clinicInfo} fieldId="map" label="map フィールドにGoogle Mapを追加" />
+            </div>
+            <p className="mt-4 text-xs text-slate-500">
+              map もしくは accessInstruction フィールドに埋め込みコードを設定すると表示されます。
+            </p>
+          </div>
         </div>
       </section>
     </main>
   );
 }
+
