@@ -119,7 +119,11 @@ export default async function DoctorPage() {
 
             <div className="mt-8 rounded-2xl border border-slate-100 bg-sky-50 p-6">
               <p className="text-xs text-slate-600">
-                <strong className="text-slate-900">ご注意：</strong>当院はラジオロジークリニックの一区画として併設されており、{doctorName}はせき専門外来を担当する医師です。
+                <strong className="text-slate-900">ご注意：</strong>当院は
+                <Link href="https://radio-gazo.jp/" target="_blank" rel="noopener noreferrer" className="text-sky-600 hover:text-sky-700 underline">
+                  ラジオロジークリニック扇町
+                </Link>
+                の一区画として併設されており、{doctorName}はせき専門外来を担当する医師です。
               </p>
             </div>
 

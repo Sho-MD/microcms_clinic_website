@@ -8,7 +8,10 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-bold mb-4">せき専門外来</h3>
             <p className="text-gray-400">
-              ラジオロジークリニック併設<br />
+                  <Link href="https://radio-gazo.jp/" target="_blank" rel="noopener noreferrer" className="hover:text-sky-200 underline">
+                    ラジオロジークリニック扇町
+                  </Link>
+                  併設<br />
               呼吸器内科専門医による<br />
               せき専門外来
             </p>

@@ -123,10 +123,17 @@ export default async function AboutPage() {
               </h2>
               <div className="rounded-2xl border border-slate-100 bg-sky-50 p-6">
                 <h3 className="text-lg font-semibold text-slate-900 mb-4">
-                  ラジオロジークリニック併設の強み
+                  <Link href="https://radio-gazo.jp/" target="_blank" rel="noopener noreferrer" className="text-sky-600 hover:text-sky-700">
+                    ラジオロジークリニック扇町
+                  </Link>
+                  併設の強み
                 </h3>
                 <p className="text-sm text-slate-600 leading-relaxed mb-4">
-                  当院はラジオロジークリニックの一区画として併設されているため、以下のような特徴があります。
+                  当院は
+                  <Link href="https://radio-gazo.jp/" target="_blank" rel="noopener noreferrer" className="text-sky-600 hover:text-sky-700 underline">
+                    ラジオロジークリニック扇町
+                  </Link>
+                  の一区画として併設されているため、以下のような特徴があります。
                 </p>
                 <ul className="space-y-3 text-sm text-slate-600">
                   <li className="flex items-start">

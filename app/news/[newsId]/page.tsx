@@ -124,16 +124,6 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
     }
   }
   
-  // デバッグ用：開発環境でのみログ出力
-  if (process.env.NODE_ENV === 'development') {
-    console.log('News Detail Debug:', {
-      hasContent: !!news.content,
-      contentType: typeof news.content,
-      contentLength: typeof news.content === 'string' ? news.content.length : 0,
-      contentHtmlLength: contentHtml.length,
-      allKeys: Object.keys(news),
-    });
-  }
 
   return (
     <main className="min-h-screen bg-white">
@@ -154,30 +144,6 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
                 </span>
               )}
             </div>
-
-            {/* デバッグ情報（常に表示） */}
-            <details className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-xs">
-              <summary className="cursor-pointer font-semibold text-yellow-800">🔍 デバッグ情報（クリックして展開）</summary>
-              <div className="mt-2 space-y-2 text-yellow-900">
-                <p><strong>利用可能なフィールド:</strong> {Object.keys(news).join(', ')}</p>
-                <p><strong>contentの存在:</strong> {news.content ? 'あり' : 'なし'}</p>
-                <p><strong>contentの型:</strong> {typeof news.content}</p>
-                <p><strong>contentの値（最初の500文字）:</strong></p>
-                <pre className="bg-white p-2 rounded text-xs overflow-auto max-h-40">
-                  {news.content 
-                    ? (typeof news.content === 'string' 
-                        ? news.content.substring(0, 500) 
-                        : JSON.stringify(news.content, null, 2).substring(0, 500))
-                    : 'contentフィールドが存在しません'}
-                </pre>
-                <p><strong>contentHtmlの長さ:</strong> {contentHtml.length}</p>
-                <p><strong>contentHtmlが空か:</strong> {contentHtml.trim() === '' ? 'はい' : 'いいえ'}</p>
-                <p><strong>contentHtml（最初の200文字）:</strong></p>
-                <pre className="bg-white p-2 rounded text-xs overflow-auto max-h-40">
-                  {contentHtml || '(空)'}
-                </pre>
-              </div>
-            </details>
 
             {contentHtml && contentHtml.trim() ? (
               <div

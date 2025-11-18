@@ -16,7 +16,10 @@ export default function TreatmentPage() {
             <div className="bg-white rounded-3xl shadow-sm p-6 md:p-8">
               <p className="text-sm leading-relaxed text-slate-600 mb-8">
                 当院では、せきに関わる様々な疾患を専門的に診療しております。
-                ラジオロジークリニック併設の強みを活かし、X線・CT検査とリアルタイム読影により、
+                <Link href="https://radio-gazo.jp/" target="_blank" rel="noopener noreferrer" className="text-sky-600 hover:text-sky-700 underline">
+                  ラジオロジークリニック扇町
+                </Link>
+                併設の強みを活かし、X線・CT検査とリアルタイム読影により、
                 迅速かつ正確な診断を行い、最適な治療をご提案いたします。
               </p>
 
@@ -105,7 +108,12 @@ export default function TreatmentPage() {
                 <ul className="space-y-3 text-sm text-slate-600">
                   <li className="flex items-start">
                     <span className="text-sky-600 mr-2 font-semibold">✓</span>
-                    <span>ラジオロジークリニック併設の強みを活かした迅速な診断</span>
+                    <span>
+                      <Link href="https://radio-gazo.jp/" target="_blank" rel="noopener noreferrer" className="text-sky-600 hover:text-sky-700 underline">
+                        ラジオロジークリニック扇町
+                      </Link>
+                      併設の強みを活かした迅速な診断
+                    </span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-sky-600 mr-2 font-semibold">✓</span>

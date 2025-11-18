@@ -35,7 +35,7 @@ export default async function Home() {
   const heroKicker = pickString(
     clinicInfo,
     ['heroKicker', 'hero_kicker'],
-    'RADIOLOGY CLINIC ALLIANCE'
+    'ラジオロジークリニック扇町'
   );
   const heroDescription = pickString(
     clinicInfo,
@@ -91,7 +91,11 @@ export default async function Home() {
       <section className="bg-gradient-to-br from-sky-50 via-white to-sky-100">
         <div className="container mx-auto grid gap-10 px-4 py-12 md:grid-cols-2 md:items-center md:py-20">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.4em] text-sky-600">{heroKicker}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.4em] text-sky-600">
+              <Link href="https://radio-gazo.jp/" target="_blank" rel="noopener noreferrer" className="hover:text-sky-700 transition">
+                {heroKicker}
+              </Link>
+            </p>
             <h1 className="mt-4 text-3xl font-bold text-slate-900 sm:text-4xl md:text-5xl lg:text-6xl">
               {clinicName}
             </h1>
@@ -358,7 +362,12 @@ export default async function Home() {
                 <span className="font-semibold text-slate-900">電話：</span>
                 {phone}
               </p>
-              <p>ラジオロジークリニック扇町 内区画で診療しています。</p>
+              <p>
+                <Link href="https://radio-gazo.jp/" target="_blank" rel="noopener noreferrer" className="text-sky-600 hover:text-sky-700 underline">
+                  ラジオロジークリニック扇町
+                </Link>
+                {' '}内区画で診療しています。
+              </p>
             </div>
           </div>
           <div className="rounded-3xl border border-slate-100 bg-slate-50 p-4">

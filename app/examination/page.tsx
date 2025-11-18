@@ -18,7 +18,11 @@ export default function ExaminationPage() {
                 長引く咳（せき）の検査について
               </h2>
               <p className="text-sm text-slate-600 leading-relaxed mb-8">
-                当院では、ラジオロジークリニック併設の強みを活かし、以下のような検査を行います。
+                当院では、
+                <Link href="https://radio-gazo.jp/" target="_blank" rel="noopener noreferrer" className="text-sky-600 hover:text-sky-700 underline">
+                  ラジオロジークリニック扇町
+                </Link>
+                併設の強みを活かし、以下のような検査を行います。
               </p>
 
               <div className="space-y-6">
@@ -30,7 +34,7 @@ export default function ExaminationPage() {
                   },
                   {
                     title: 'CT検査',
-                    description: 'より詳細な画像診断が必要な場合、CT検査を実施します。当院ではラジオロジークリニックに併設されているため、すぐにCT検査が可能です。CT検査により、X線では見つけにくい小さな病変や、より詳細な肺の状態を確認できます。非結核性抗酸菌症などの診断において、CT検査は非常に有用です。',
+                           description: 'より詳細な画像診断が必要な場合、CT検査を実施します。当院ではラジオロジークリニック扇町に併設されているため、すぐにCT検査が可能です。CT検査により、X線では見つけにくい小さな病変や、より詳細な肺の状態を確認できます。非結核性抗酸菌症などの診断において、CT検査は非常に有用です。',
                   },
                   {
                     title: '肺機能検査（スパイロメーター）',
