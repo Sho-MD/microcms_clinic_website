@@ -1,4 +1,4 @@
-import { createClient, MicroCMSQueries } from 'microcms-js-sdk';
+import { createClient, MicroCMSQueries, MicroCMSListResponse } from 'microcms-js-sdk';
 
 /**
  * MicroCMSクライアントを取得する
@@ -102,6 +102,41 @@ export async function fetchClinicInfo(queries?: MicroCMSQueries): Promise<Clinic
   const client = getClient();
   return client.get<ClinicInfo>({
     endpoint: 'information',
+    queries,
+  });
+}
+
+export type NewsItem = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt?: string;
+  revisedAt?: string;
+  title?: string;
+  content?: string;
+  body?: string;
+  summary?: string;
+  description?: string;
+  category?: {
+    id: string;
+    name?: string;
+  } | null;
+  [field: string]: unknown;
+};
+
+export async function fetchNewsList(queries?: MicroCMSQueries) {
+  const client = getClient();
+  return client.getList<NewsItem>({
+    endpoint: 'news',
+    queries,
+  });
+}
+
+export async function fetchNewsDetail(contentId: string, queries?: MicroCMSQueries) {
+  const client = getClient();
+  return client.get<NewsItem>({
+    endpoint: 'news',
+    contentId,
     queries,
   });
 }

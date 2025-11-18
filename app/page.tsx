@@ -1,4 +1,4 @@
-import { fetchClinicInfo } from '../microcms';
+import { fetchClinicInfo, fetchNewsList } from '../microcms';
 import Link from 'next/link';
 import { FieldDisplay } from './components/FieldDisplay';
 import CMSImage from './components/CMSImage';
@@ -21,6 +21,11 @@ const pickString = (record: Record<string, unknown>, keys: string[], fallback = 
 
 export default async function Home() {
   const clinicInfo = await fetchClinicInfo();
+  const newsResponse = await fetchNewsList({
+    limit: 4,
+    orders: '-publishedAt',
+  });
+  const newsItems = newsResponse.contents ?? [];
 
   const clinicName = pickString(
     clinicInfo,
@@ -60,14 +65,6 @@ export default async function Home() {
       { title: '2. 問診と検査', description: '症状ヒアリング後、必要に応じてCT/MRI・呼吸機能検査を行います。' },
       { title: '3. 読影・診断', description: '放射線診断専門医が即時読影し、呼吸器専門医が診断。' },
       { title: '4. 治療とフォロー', description: '薬物治療とセルフケア指導を行い、再発を防ぎます。' },
-    ]
-  );
-
-  const news = toArray<any>(
-    (clinicInfo.news || clinicInfo['お知らせ']) as any[],
-    [
-      { title: '土曜予約のお知らせ', date: '2025-01-15', description: '完全予約制のため、お電話でご希望時間をご相談ください。' },
-      { title: '平日診療の準備', date: '2024-12-01', description: '平日診療再開に向け準備を進めています。続報をお待ちください。' },
     ]
   );
 
@@ -253,15 +250,47 @@ export default async function Home() {
             <h2 className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">お知らせ</h2>
           </div>
           <div className="mt-8 grid gap-4 md:grid-cols-2">
-            {news.map((item, index) => (
-              <div key={index} className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                <p className="text-xs font-semibold text-sky-600">{item.date ?? 'YYYY-MM-DD'}</p>
-                <p className="mt-1 text-base font-semibold text-slate-900">{item.title ?? `お知らせ ${index + 1}`}</p>
-                <p className="mt-2 text-sm text-slate-600">
-                  {item.description ?? 'microCMSの news フィールドに本文を登録してください。'}
-                </p>
+            {newsItems.length === 0 ? (
+              <div className="col-span-2 rounded-2xl border border-slate-100 bg-slate-50 p-6 text-center text-sm text-slate-600">
+                現在公開中のお知らせはありません。
               </div>
-            ))}
+            ) : (
+              newsItems.map((item) => {
+                const displayDate = item.publishedAt
+                  ? new Date(item.publishedAt).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' })
+                  : '';
+                const summary =
+                  item.summary ||
+                  item.description ||
+                  (typeof item.content === 'string' ? item.content.replace(/<[^>]+>/g, '').slice(0, 80) : '') ||
+                  (typeof item.body === 'string' ? item.body.replace(/<[^>]+>/g, '').slice(0, 80) : '');
+                return (
+                  <div key={item.id} className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
+                    <p className="text-xs font-semibold text-sky-600">{displayDate || '公開日未定'}</p>
+                    <h3 className="mt-1 text-base font-semibold text-slate-900">{item.title ?? 'お知らせ'}</h3>
+                    <p className="mt-2 text-sm text-slate-600">
+                      {summary || '詳細は本文をご確認ください。'}
+                    </p>
+                    <div className="mt-4">
+                      <Link
+                        href={`/news/${item.id}`}
+                        className="text-sm font-semibold text-sky-600 hover:text-sky-700"
+                      >
+                        詳細を見る →
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+          <div className="mt-8 text-center">
+            <Link
+              href="/news"
+              className="rounded-full border border-sky-200 px-7 py-3 text-sm font-semibold text-sky-700 transition hover:border-sky-300 focus:outline-none focus:ring-2 focus:ring-sky-100 focus:ring-offset-2 inline-block"
+            >
+              過去のお知らせ一覧を見る
+            </Link>
           </div>
         </div>
       </section>
