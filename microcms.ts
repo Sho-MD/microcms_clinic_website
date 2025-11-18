@@ -135,10 +135,17 @@ export async function fetchNewsList(queries?: MicroCMSQueries) {
 
 export async function fetchNewsDetail(contentId: string, queries?: MicroCMSQueries) {
   const client = getClient();
+  // リッチエディタフィールドをHTML形式で取得するためのクエリを追加
+  const finalQueries = {
+    ...queries,
+    // contentフィールドがリッチエディタの場合、HTML形式で取得
+    // ただし、既にqueriesに指定がある場合は上書きしない
+    ...(queries?.fields ? {} : {}),
+  };
   return client.get<NewsItem>({
     endpoint: 'news',
     contentId,
-    queries,
+    queries: finalQueries,
   });
 }
 

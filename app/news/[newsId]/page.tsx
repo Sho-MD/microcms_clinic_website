@@ -40,16 +40,57 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   // contentフィールドの取得（複数の形式に対応）
   let contentHtml = '';
   
-  if (typeof news.content === 'string' && news.content.trim()) {
-    contentHtml = news.content;
-  } else if (typeof news.body === 'string' && news.body.trim()) {
-    contentHtml = news.body;
-  } else if (typeof news.description === 'string' && news.description.trim()) {
-    contentHtml = `<p>${news.description}</p>`;
-  } else if (news.content && typeof news.content === 'object') {
+  // まず、newsオブジェクトのすべてのキーを確認（デバッグ用）
+  const allKeys = Object.keys(news);
+  
+  // contentフィールドを優先的に取得
+  const contentValue = news.content;
+  
+  if (typeof contentValue === 'string' && contentValue.trim()) {
+    // 文字列の場合（HTML文字列）
+    contentHtml = contentValue;
+  } else if (contentValue && typeof contentValue === 'object') {
     // オブジェクト形式の場合（MicroCMSのリッチエディタのブロック構造など）
-    // とりあえず文字列化して表示
-    contentHtml = `<pre>${JSON.stringify(news.content, null, 2)}</pre>`;
+    // 配列の場合
+    if (Array.isArray(contentValue)) {
+      // ブロック構造をHTMLに変換
+      contentHtml = contentValue.map((block: any) => {
+        if (typeof block === 'string') {
+          return block;
+        } else if (block && typeof block === 'object') {
+          // ブロックオブジェクトの場合
+          if (block.html) {
+            return block.html;
+          } else if (block.text) {
+            return `<p>${block.text}</p>`;
+          } else if (block.content) {
+            return typeof block.content === 'string' ? block.content : String(block.content);
+          }
+        }
+        return '';
+      }).filter(Boolean).join('');
+    } else {
+      // 単一オブジェクトの場合
+      if (contentValue.html) {
+        contentHtml = contentValue.html;
+      } else if (contentValue.text) {
+        contentHtml = `<p>${contentValue.text}</p>`;
+      } else {
+        // その他の場合は文字列化
+        contentHtml = `<pre>${JSON.stringify(contentValue, null, 2)}</pre>`;
+      }
+    }
+  }
+  
+  // contentが取得できなかった場合、他のフィールドを確認
+  if (!contentHtml) {
+    if (typeof news.body === 'string' && news.body.trim()) {
+      contentHtml = news.body;
+    } else if (typeof news.description === 'string' && news.description.trim()) {
+      contentHtml = `<p>${news.description}</p>`;
+    } else if (typeof news.summary === 'string' && news.summary.trim()) {
+      contentHtml = `<p>${news.summary}</p>`;
+    }
   }
 
   return (
@@ -78,9 +119,22 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
                 dangerouslySetInnerHTML={{ __html: contentHtml }}
               />
             ) : (
-              <p className="mt-8 text-sm text-slate-600">
-                本文は近日公開予定です。
-              </p>
+              <div className="mt-8">
+                <p className="text-sm text-slate-600 mb-4">
+                  本文は近日公開予定です。
+                </p>
+                {/* デバッグ情報（開発時のみ） */}
+                {process.env.NODE_ENV === 'development' && (
+                  <details className="mt-4 p-4 bg-slate-100 rounded-lg text-xs">
+                    <summary className="cursor-pointer font-semibold text-slate-700">デバッグ情報（開発時のみ）</summary>
+                    <div className="mt-2 space-y-2">
+                      <p><strong>利用可能なフィールド:</strong> {Object.keys(news).join(', ')}</p>
+                      <p><strong>contentの型:</strong> {typeof news.content}</p>
+                      <p><strong>contentの値:</strong> {JSON.stringify(news.content, null, 2).substring(0, 500)}</p>
+                    </div>
+                  </details>
+                )}
+              </div>
             )}
           </div>
 
