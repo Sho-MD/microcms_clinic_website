@@ -42,7 +42,15 @@ export default function Footer() {
           </div>
         </div>
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; せき専門外来 All Rights Reserved.</p>
+          <p>
+            <Link href="/" className="hover:text-white transition">
+              &copy; せき専門外来
+            </Link>
+            {' / '}
+            <Link href="https://radio-gazo.jp/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
+              &copy; 2014 ラジオロジークリニック扇町
+            </Link>
+          </p>
         </div>
       </div>
     </footer>
