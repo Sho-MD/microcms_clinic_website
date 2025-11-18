@@ -71,7 +71,7 @@ export default async function AccessPage() {
 
             <section className="bg-white rounded-3xl shadow-sm p-6 md:p-8">
               <h2 className="text-xl font-bold text-slate-900 mb-6">
-                診療時間
+                診療時間（せき専門外来）
               </h2>
               <div className="rounded-2xl border border-slate-100 bg-white p-4 sm:p-6 overflow-x-auto">
                 <table className="w-full border-collapse text-sm">
@@ -89,35 +89,61 @@ export default async function AccessPage() {
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 font-semibold text-xs sm:text-sm text-slate-900">09:00～12:30</td>
-                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-600">●</td>
-                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-600">●</td>
-                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-600">●</td>
-                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">／</td>
-                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-600">●</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 font-semibold text-xs sm:text-sm text-slate-900">9:00～12:00</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">×</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">×</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">×</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">×</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">×</td>
                       <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center">
-                        <span className="text-sky-600 font-semibold">▲</span>
-                        <span className="text-xs block text-red-600 mt-1">完全予約制</span>
+                        <span className="text-sky-600 font-semibold">○</span>
+                        <span className="text-xs block text-red-600 mt-1 font-semibold">完全予約制</span>
                       </td>
-                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">／</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">×</td>
                     </tr>
                     <tr>
-                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 font-semibold text-xs sm:text-sm text-slate-900">16:00〜19:00</td>
-                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-600">●</td>
-                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-600">●</td>
-                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-600">●</td>
-                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">／</td>
-                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-600">●</td>
-                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">／</td>
-                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">／</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 font-semibold text-xs sm:text-sm text-slate-900">12:00～17:00</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">×</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">×</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">×</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">×</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">×</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center">
+                        <span className="text-sky-600 font-semibold">○</span>
+                        <span className="text-xs block text-red-600 mt-1 font-semibold">完全予約制</span>
+                      </td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">×</td>
+                    </tr>
+                    <tr>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 font-semibold text-xs sm:text-sm text-slate-900">17:00～19:00</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">×</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">×</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">×</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">×</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">×</td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center">
+                        <span className="text-sky-600 font-semibold">○</span>
+                        <span className="text-xs block text-red-600 mt-1 font-semibold">完全予約制</span>
+                      </td>
+                      <td className="border border-slate-200 px-3 sm:px-4 py-2 sm:py-3 text-center text-slate-400">×</td>
                     </tr>
                   </tbody>
                 </table>
                 <div className="mt-4 space-y-2 text-xs text-slate-600">
-                  <p>
-                    <span className="font-semibold">▲</span> 土曜：9:00〜13:00（<span className="text-red-600 font-semibold">完全予約制</span>）
+                  <p className="font-semibold text-slate-900">
+                    土曜日のせき専門外来は完全予約制です。
                   </p>
-                  <p>休診日：木曜・土曜午後・日祝日</p>
+                  <p>
+                    平日の
+                    <Link href="https://radio-gazo.jp/" target="_blank" rel="noopener noreferrer" className="text-sky-600 hover:text-sky-700 underline">
+                      ラジオロジークリニック扇町
+                    </Link>
+                    の診療時間については、
+                    <Link href="https://radio-gazo.jp/#schedule" target="_blank" rel="noopener noreferrer" className="text-sky-600 hover:text-sky-700 underline">
+                      こちら
+                    </Link>
+                    をご確認ください。
+                  </p>
                 </div>
               </div>
             </section>
