@@ -86,7 +86,7 @@ export default async function Home() {
   );
 
   const address = pickString(clinicInfo, ['address', '住所'], '大阪府大阪市北区...');
-  const phone = pickString(clinicInfo, ['phone', '電話'], '06-XXXX-XXXX');
+  const phone = pickString(clinicInfo, ['phone', 'tel', '電話', 'telephone'], '06-XXXX-XXXX');
 
   return (
     <main className="min-h-screen bg-white">
