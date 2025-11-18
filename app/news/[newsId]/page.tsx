@@ -3,19 +3,24 @@ import { notFound } from 'next/navigation';
 import { fetchNewsDetail } from '../../../microcms';
 
 type NewsDetailPageProps = {
-  params: {
+  params: Promise<{
+    newsId: string;
+  }> | {
     newsId: string;
   };
 };
 
 export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
+  // paramsがPromiseの場合は解決
+  const resolvedParams = params instanceof Promise ? await params : params;
+  
   let news;
   try {
     // params.newsIdを確認
-    const newsId = params.newsId;
+    const newsId = resolvedParams.newsId;
     
     // もしnewsIdが存在しない、または不正な場合は404
-    if (!newsId) {
+    if (!newsId || typeof newsId !== 'string') {
       notFound();
     }
     
@@ -30,8 +35,19 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   }
   
   // newsがリスト形式（getListの結果）の場合、contentsから最初の要素を取得
-  if ('contents' in news && Array.isArray(news.contents) && news.contents.length > 0) {
-    news = news.contents[0] as typeof news;
+  if (news && typeof news === 'object' && 'contents' in news) {
+    const listResponse = news as any;
+    if (Array.isArray(listResponse.contents) && listResponse.contents.length > 0) {
+      news = listResponse.contents[0];
+    } else {
+      // contentsが空の場合は404
+      notFound();
+    }
+  }
+  
+  // newsがまだリスト形式の場合は404
+  if (!news || typeof news !== 'object' || ('contents' in news && !('id' in news))) {
+    notFound();
   }
 
   // 日付の取得（dateフィールド優先、なければpublishedAt）
