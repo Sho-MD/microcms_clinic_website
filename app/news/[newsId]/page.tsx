@@ -40,17 +40,15 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   // contentフィールドの取得（複数の形式に対応）
   let contentHtml = '';
   
-  // まず、newsオブジェクトのすべてのキーを確認（デバッグ用）
-  const allKeys = Object.keys(news);
-  
   // contentフィールドを優先的に取得
   const contentValue = news.content;
   
-  if (typeof contentValue === 'string' && contentValue.trim()) {
-    // 文字列の場合（HTML文字列）
+  // 文字列の場合（HTML文字列）- これが最も一般的な形式
+  if (typeof contentValue === 'string') {
     contentHtml = contentValue;
-  } else if (contentValue && typeof contentValue === 'object') {
-    // オブジェクト形式の場合（MicroCMSのリッチエディタのブロック構造など）
+  } 
+  // オブジェクト形式の場合（MicroCMSのリッチエディタのブロック構造など）
+  else if (contentValue && typeof contentValue === 'object') {
     // 配列の場合
     if (Array.isArray(contentValue)) {
       // ブロック構造をHTMLに変換
@@ -69,8 +67,9 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
         }
         return '';
       }).filter(Boolean).join('');
-    } else {
-      // 単一オブジェクトの場合
+    } 
+    // 単一オブジェクトの場合
+    else {
       if (contentValue.html) {
         contentHtml = contentValue.html;
       } else if (contentValue.text) {
@@ -83,7 +82,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   }
   
   // contentが取得できなかった場合、他のフィールドを確認
-  if (!contentHtml) {
+  if (!contentHtml || contentHtml.trim() === '') {
     if (typeof news.body === 'string' && news.body.trim()) {
       contentHtml = news.body;
     } else if (typeof news.description === 'string' && news.description.trim()) {
@@ -91,6 +90,17 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
     } else if (typeof news.summary === 'string' && news.summary.trim()) {
       contentHtml = `<p>${news.summary}</p>`;
     }
+  }
+  
+  // デバッグ用：開発環境でのみログ出力
+  if (process.env.NODE_ENV === 'development') {
+    console.log('News Detail Debug:', {
+      hasContent: !!news.content,
+      contentType: typeof news.content,
+      contentLength: typeof news.content === 'string' ? news.content.length : 0,
+      contentHtmlLength: contentHtml.length,
+      allKeys: Object.keys(news),
+    });
   }
 
   return (
@@ -113,9 +123,9 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
               )}
             </div>
 
-            {contentHtml ? (
+            {contentHtml && contentHtml.trim() ? (
               <div
-                className="mt-8 text-sm leading-relaxed text-slate-700 space-y-4 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-slate-900 [&_h2]:mt-6 [&_p]:mb-4"
+                className="mt-8 text-sm leading-relaxed text-slate-700 space-y-4 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-slate-900 [&_h2]:mt-6 [&_h2]:mb-4 [&_p]:mb-4 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:space-y-2 [&_figure]:my-4 [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-lg"
                 dangerouslySetInnerHTML={{ __html: contentHtml }}
               />
             ) : (
@@ -130,7 +140,17 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
                     <div className="mt-2 space-y-2">
                       <p><strong>利用可能なフィールド:</strong> {Object.keys(news).join(', ')}</p>
                       <p><strong>contentの型:</strong> {typeof news.content}</p>
-                      <p><strong>contentの値:</strong> {JSON.stringify(news.content, null, 2).substring(0, 500)}</p>
+                      <p><strong>contentの値（最初の500文字）:</strong></p>
+                      <pre className="bg-white p-2 rounded text-xs overflow-auto">
+                        {typeof news.content === 'string' 
+                          ? news.content.substring(0, 500) 
+                          : JSON.stringify(news.content, null, 2).substring(0, 500)}
+                      </pre>
+                      <p><strong>contentHtmlの長さ:</strong> {contentHtml.length}</p>
+                      <p><strong>contentHtml（最初の200文字）:</strong></p>
+                      <pre className="bg-white p-2 rounded text-xs overflow-auto">
+                        {contentHtml.substring(0, 200)}
+                      </pre>
                     </div>
                   </details>
                 )}
