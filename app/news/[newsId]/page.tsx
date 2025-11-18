@@ -11,13 +11,27 @@ type NewsDetailPageProps = {
 export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   let news;
   try {
-    news = await fetchNewsDetail(params.newsId);
+    // params.newsIdを確認
+    const newsId = params.newsId;
+    
+    // もしnewsIdが存在しない、または不正な場合は404
+    if (!newsId) {
+      notFound();
+    }
+    
+    news = await fetchNewsDetail(newsId);
   } catch (error) {
+    console.error('Error fetching news detail:', error);
     notFound();
   }
 
   if (!news) {
     notFound();
+  }
+  
+  // newsがリスト形式（getListの結果）の場合、contentsから最初の要素を取得
+  if ('contents' in news && Array.isArray(news.contents) && news.contents.length > 0) {
+    news = news.contents[0] as typeof news;
   }
 
   // 日付の取得（dateフィールド優先、なければpublishedAt）
