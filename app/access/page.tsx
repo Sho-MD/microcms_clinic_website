@@ -17,6 +17,8 @@ export default async function AccessPage() {
 
   const address = pickString(clinicInfo, ['address', '住所', 'address_1'], '住所情報を設定してください');
   const phone = pickString(clinicInfo, ['phone', 'tel', '電話', 'telephone'], '電話番号を設定してください');
+  // 電話番号からハイフンやスペースを削除してtel:リンク用に変換
+  const phoneLink = phone.replace(/[-\s]/g, '');
   
   const accessInstruction = clinicInfo.accessInstruction;
   const accessInstructionHtml = typeof accessInstruction === 'string' ? accessInstruction : null;
@@ -44,7 +46,11 @@ export default async function AccessPage() {
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-slate-900 mb-2">電話番号</h3>
-                  <p className="text-lg font-semibold text-slate-900">{phone}</p>
+                  <p className="text-lg font-semibold text-slate-900">
+                    <Link href={`tel:${phoneLink}`} className="hover:text-sky-600 transition">
+                      {phone}
+                    </Link>
+                  </p>
                 </div>
                 {accessInstructionHtml && (
                   <div className="mt-6">
@@ -159,7 +165,12 @@ export default async function AccessPage() {
                 <div className="space-y-3">
                   <div className="flex items-center">
                     <span className="text-sky-600 font-semibold mr-3">📞</span>
-                    <span className="text-sm text-slate-600">お電話でのご連絡：<span className="font-semibold text-slate-900">{phone}</span></span>
+                    <span className="text-sm text-slate-600">
+                      お電話でのご連絡：
+                      <Link href={`tel:${phoneLink}`} className="font-semibold text-slate-900 hover:text-sky-600 transition">
+                        {phone}
+                      </Link>
+                    </span>
                   </div>
                   <div className="flex items-center">
                     <span className="text-sky-600 font-semibold mr-3">💻</span>

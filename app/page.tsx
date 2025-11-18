@@ -84,6 +84,8 @@ export default async function Home() {
 
   const address = pickString(clinicInfo, ['address', '住所'], '大阪府大阪市北区...');
   const phone = pickString(clinicInfo, ['phone', 'tel', '電話', 'telephone'], '06-XXXX-XXXX');
+  // 電話番号からハイフンやスペースを削除してtel:リンク用に変換
+  const phoneLink = phone.replace(/[-\s]/g, '');
 
   return (
     <main className="min-h-screen bg-white">
@@ -240,7 +242,11 @@ export default async function Home() {
               </div>
             </div>
             <div className="mt-6 border-t border-sky-700 pt-4 text-xs text-sky-200">
-              予約フォーム公開までは <span className="font-semibold text-white">{phone}</span> へご連絡ください。
+              予約フォーム公開までは{' '}
+              <Link href={`tel:${phoneLink}`} className="font-semibold text-white hover:text-sky-200 transition underline">
+                {phone}
+              </Link>
+              {' '}へご連絡ください。
             </div>
           </div>
         </div>
@@ -360,7 +366,9 @@ export default async function Home() {
               </p>
               <p>
                 <span className="font-semibold text-slate-900">電話：</span>
-                {phone}
+                <Link href={`tel:${phoneLink}`} className="text-slate-600 hover:text-sky-600 transition">
+                  {phone}
+                </Link>
               </p>
               <p>
                 <Link href="https://radio-gazo.jp/" target="_blank" rel="noopener noreferrer" className="text-sky-600 hover:text-sky-700 underline">
