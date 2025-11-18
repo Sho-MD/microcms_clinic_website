@@ -52,7 +52,8 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
     // 配列の場合
     if (Array.isArray(contentValue)) {
       // ブロック構造をHTMLに変換
-      contentHtml = contentValue.map((block: any) => {
+      const contentArray = contentValue as unknown[];
+      contentHtml = contentArray.map((block: any) => {
         if (typeof block === 'string') {
           return block;
         } else if (block && typeof block === 'object') {
@@ -70,10 +71,11 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
     } 
     // 単一オブジェクトの場合
     else {
-      if (contentValue.html) {
-        contentHtml = contentValue.html;
-      } else if (contentValue.text) {
-        contentHtml = `<p>${contentValue.text}</p>`;
+      const contentObj = contentValue as Record<string, unknown>;
+      if (contentObj.html && typeof contentObj.html === 'string') {
+        contentHtml = contentObj.html;
+      } else if (contentObj.text && typeof contentObj.text === 'string') {
+        contentHtml = `<p>${contentObj.text}</p>`;
       } else {
         // その他の場合は文字列化
         contentHtml = `<pre>${JSON.stringify(contentValue, null, 2)}</pre>`;
