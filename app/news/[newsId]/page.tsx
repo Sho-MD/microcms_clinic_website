@@ -123,6 +123,30 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
               )}
             </div>
 
+            {/* デバッグ情報（常に表示） */}
+            <details className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-xs">
+              <summary className="cursor-pointer font-semibold text-yellow-800">🔍 デバッグ情報（クリックして展開）</summary>
+              <div className="mt-2 space-y-2 text-yellow-900">
+                <p><strong>利用可能なフィールド:</strong> {Object.keys(news).join(', ')}</p>
+                <p><strong>contentの存在:</strong> {news.content ? 'あり' : 'なし'}</p>
+                <p><strong>contentの型:</strong> {typeof news.content}</p>
+                <p><strong>contentの値（最初の500文字）:</strong></p>
+                <pre className="bg-white p-2 rounded text-xs overflow-auto max-h-40">
+                  {news.content 
+                    ? (typeof news.content === 'string' 
+                        ? news.content.substring(0, 500) 
+                        : JSON.stringify(news.content, null, 2).substring(0, 500))
+                    : 'contentフィールドが存在しません'}
+                </pre>
+                <p><strong>contentHtmlの長さ:</strong> {contentHtml.length}</p>
+                <p><strong>contentHtmlが空か:</strong> {contentHtml.trim() === '' ? 'はい' : 'いいえ'}</p>
+                <p><strong>contentHtml（最初の200文字）:</strong></p>
+                <pre className="bg-white p-2 rounded text-xs overflow-auto max-h-40">
+                  {contentHtml || '(空)'}
+                </pre>
+              </div>
+            </details>
+
             {contentHtml && contentHtml.trim() ? (
               <div
                 className="mt-8 text-sm leading-relaxed text-slate-700 space-y-4 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-slate-900 [&_h2]:mt-6 [&_h2]:mb-4 [&_p]:mb-4 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:space-y-2 [&_figure]:my-4 [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-lg"
@@ -133,27 +157,9 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
                 <p className="text-sm text-slate-600 mb-4">
                   本文は近日公開予定です。
                 </p>
-                {/* デバッグ情報（開発時のみ） */}
-                {process.env.NODE_ENV === 'development' && (
-                  <details className="mt-4 p-4 bg-slate-100 rounded-lg text-xs">
-                    <summary className="cursor-pointer font-semibold text-slate-700">デバッグ情報（開発時のみ）</summary>
-                    <div className="mt-2 space-y-2">
-                      <p><strong>利用可能なフィールド:</strong> {Object.keys(news).join(', ')}</p>
-                      <p><strong>contentの型:</strong> {typeof news.content}</p>
-                      <p><strong>contentの値（最初の500文字）:</strong></p>
-                      <pre className="bg-white p-2 rounded text-xs overflow-auto">
-                        {typeof news.content === 'string' 
-                          ? news.content.substring(0, 500) 
-                          : JSON.stringify(news.content, null, 2).substring(0, 500)}
-                      </pre>
-                      <p><strong>contentHtmlの長さ:</strong> {contentHtml.length}</p>
-                      <p><strong>contentHtml（最初の200文字）:</strong></p>
-                      <pre className="bg-white p-2 rounded text-xs overflow-auto">
-                        {contentHtml.substring(0, 200)}
-                      </pre>
-                    </div>
-                  </details>
-                )}
+                <p className="text-xs text-red-600">
+                  ⚠️ contentが表示されていません。上記のデバッグ情報を確認してください。
+                </p>
               </div>
             )}
           </div>
