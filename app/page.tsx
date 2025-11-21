@@ -110,7 +110,7 @@ export default async function Home() {
     <main className="min-h-screen bg-background-alt selection:bg-primary selection:text-white">
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-background pt-24 pb-16 lg:pt-32 lg:pb-24">
+      <section className="relative overflow-hidden bg-white/60 dark:bg-slate-900/60 backdrop-blur-md pt-24 pb-16 lg:pt-32 lg:pb-24">
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
             <div className="animate-fade-in">
@@ -160,7 +160,7 @@ export default async function Home() {
       </section>
 
       {/* Concept Section */}
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-white/40 dark:bg-slate-900/40 backdrop-blur-md">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl font-bold text-secondary sm:text-4xl mb-6">
@@ -241,7 +241,7 @@ export default async function Home() {
       </section>
 
       {/* Services Section */}
-      <section className="py-20 bg-background-soft">
+      <section className="py-20 bg-sky-50/50 dark:bg-slate-800/50 backdrop-blur-md">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
             <div>
@@ -284,7 +284,7 @@ export default async function Home() {
       </section>
 
       {/* Flow Section */}
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <span className="text-primary font-bold tracking-wider text-sm uppercase">Flow</span>
@@ -313,7 +313,7 @@ export default async function Home() {
       </section>
 
       {/* Doctor Section */}
-      <section className="py-20 bg-background-alt">
+      <section className="py-20 bg-slate-50/50 dark:bg-slate-800/50 backdrop-blur-md">
         <div className="container mx-auto px-4">
           <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-border overflow-hidden">
             <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -366,7 +366,7 @@ export default async function Home() {
       </section>
 
       {/* News Section */}
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-end mb-10">
             <h2 className="text-2xl font-bold text-secondary">お知らせ</h2>
@@ -409,7 +409,7 @@ export default async function Home() {
       </section>
 
       {/* Access & Info */}
-      <section className="py-20 bg-secondary text-white">
+      <section className="py-20 bg-slate-900/90 backdrop-blur-md text-white">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12">
             <div>
