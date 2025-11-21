@@ -176,17 +176,66 @@ export default async function Home() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { title: '即日CT/MRI撮影', desc: '併設クリニックと連携し、受診当日に高度な画像検査が可能です。', icon: '🔍' },
-              { title: 'ダブルチェック体制', desc: '放射線診断専門医と呼吸器内科専門医、2人の専門家が診断します。', icon: '👥' },
-              { title: '専門的な治療', desc: '正確な診断に基づき、吸入療法や生活指導など最適な治療を行います。', icon: '💊' },
-            ].map((feature, i) => (
-              <div key={i} className="bg-background-alt rounded-2xl p-8 border border-border hover:border-primary/30 transition-colors">
-                <div className="text-4xl mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-bold text-secondary mb-3">{feature.title}</h3>
-                <p className="text-foreground-muted leading-relaxed">{feature.desc}</p>
+            {/* Card 1: CT/MRI (CMS Image) */}
+            <div className="group relative overflow-hidden rounded-2xl shadow-lg transition-all hover:shadow-xl hover:-translate-y-1">
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/50 to-transparent z-10"></div>
+              <div className="relative h-64 w-full">
+                <CMSImage
+                  imageField={clinicInfo.CTpicture}
+                  alt="即日CT/MRI撮影"
+                  fieldName="CTpicture"
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                />
               </div>
-            ))}
+              <div className="absolute bottom-0 left-0 p-6 z-20 text-white">
+                <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                  即日CT/MRI撮影
+                </h3>
+                <p className="text-sm text-slate-200 leading-relaxed">
+                  併設クリニックと連携し、受診当日に高度な画像検査が可能です。
+                </p>
+              </div>
+            </div>
+
+            {/* Card 2: Double Check (Local Image) */}
+            <div className="group relative overflow-hidden rounded-2xl shadow-lg transition-all hover:shadow-xl hover:-translate-y-1">
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/50 to-transparent z-10"></div>
+              <div className="relative h-64 w-full">
+                <img
+                  src="/images/double_check.png"
+                  alt="ダブルチェック体制"
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+              </div>
+              <div className="absolute bottom-0 left-0 p-6 z-20 text-white">
+                <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                  ダブルチェック体制
+                </h3>
+                <p className="text-sm text-slate-200 leading-relaxed">
+                  放射線診断専門医と呼吸器内科専門医、2人の専門家が診断します。
+                </p>
+              </div>
+            </div>
+
+            {/* Card 3: Treatment (Local Image) */}
+            <div className="group relative overflow-hidden rounded-2xl shadow-lg transition-all hover:shadow-xl hover:-translate-y-1">
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/50 to-transparent z-10"></div>
+              <div className="relative h-64 w-full">
+                <img
+                  src="/images/treatment.png"
+                  alt="専門的な治療"
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+              </div>
+              <div className="absolute bottom-0 left-0 p-6 z-20 text-white">
+                <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+                  専門的な治療
+                </h3>
+                <p className="text-sm text-slate-200 leading-relaxed">
+                  正確な診断に基づき、吸入療法や生活指導など最適な治療を行います。
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>

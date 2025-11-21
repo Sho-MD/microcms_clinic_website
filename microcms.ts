@@ -78,6 +78,7 @@ export type ClinicInfo = {
   heroDescription?: string;
   reservationNote?: string;
   heroImage?: unknown;
+  CTpicture?: unknown; // Added CTpicture field
   services?: Array<{
     title?: string;
     description?: string;
