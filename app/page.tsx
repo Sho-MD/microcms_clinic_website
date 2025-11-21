@@ -124,7 +124,7 @@ export default async function Home() {
               <h1 className="text-4xl font-bold tracking-tight text-secondary sm:text-5xl lg:text-6xl leading-[1.1]">
                 {clinicName}
               </h1>
-              <p className="mt-6 text-lg leading-relaxed text-foreground-muted max-w-xl">
+              <p className="mt-6 text-lg leading-relaxed text-foreground font-medium max-w-xl">
                 {heroDescription}
               </p>
 
@@ -147,7 +147,7 @@ export default async function Home() {
               </p>
             </div>
 
-            <div className="relative lg:h-[600px] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <div className="relative h-[300px] lg:h-[600px] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <CMSImage imageField={heroImage} alt="Clinic Interior" fieldName="heroImage" className="object-cover w-full h-full scale-105 hover:scale-100 transition-transform duration-700" />
               <div className="absolute inset-0 bg-gradient-to-t from-secondary/20 to-transparent pointer-events-none"></div>
             </div>
@@ -255,7 +255,7 @@ export default async function Home() {
 
           <div className="grid gap-8 md:grid-cols-3">
             {services.map((service, index) => (
-              <div key={index} className="bg-white rounded-2xl p-8 shadow-sm border border-border hover:shadow-md transition-shadow flex flex-col h-full">
+              <div key={index} className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl p-8 shadow-sm border border-border hover:shadow-md transition-shadow flex flex-col h-full">
                 <h3 className="text-xl font-bold text-secondary mb-4 border-b border-border pb-4">
                   {service.title ?? `診療メニュー ${index + 1}`}
                 </h3>
@@ -454,7 +454,7 @@ export default async function Home() {
                 if (mapContent) {
                   return (
                     <div
-                      className="w-full h-full transition-all duration-500 [&_iframe]:w-full [&_iframe]:h-full"
+                      className="w-full h-full transition-all duration-500 [&_iframe]:w-full [&_iframe]:h-full [&_iframe]:block"
                       dangerouslySetInnerHTML={{ __html: mapContent }}
                     />
                   );
