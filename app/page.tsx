@@ -454,7 +454,7 @@ export default async function Home() {
                 if (mapContent) {
                   return (
                     <div
-                      className="w-full h-full transition-all duration-500"
+                      className="w-full h-full transition-all duration-500 [&_iframe]:w-full [&_iframe]:h-full"
                       dangerouslySetInnerHTML={{ __html: mapContent }}
                     />
                   );
