@@ -12,7 +12,7 @@ type FieldDisplayProps = {
  */
 export function FieldDisplay({ data, fieldId, label, className = '' }: FieldDisplayProps) {
   const value = data[fieldId];
-  
+
   if (value === undefined || value === null || value === '') {
     return null;
   }
@@ -20,27 +20,27 @@ export function FieldDisplay({ data, fieldId, label, className = '' }: FieldDisp
   // 配列の場合
   if (Array.isArray(value)) {
     if (value.length === 0) return null;
-    
+
     return (
       <div className={className}>
-        {label && <h3 className="font-bold text-blue-900 mb-2">{label}</h3>}
+        {label && <h3 className="font-bold text-blue-900 dark:text-blue-300 mb-2">{label}</h3>}
         <ul className="space-y-2">
           {value.map((item, index) => {
             if (typeof item === 'object' && item !== null) {
               // オブジェクトの配列の場合（例：特徴の配列）
               return (
-                <li key={index} className="bg-white p-4 rounded-lg shadow-sm">
+                <li key={index} className="bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm p-4 rounded-lg shadow-sm">
                   {Object.entries(item).map(([key, val]) => (
                     <div key={key} className="mb-2">
-                      <span className="font-semibold text-gray-700">{key}: </span>
-                      <span className="text-gray-700">{String(val)}</span>
+                      <span className="font-semibold text-gray-700 dark:text-gray-200">{key}: </span>
+                      <span className="text-gray-700 dark:text-gray-200">{String(val)}</span>
                     </div>
                   ))}
                 </li>
               );
             }
             return (
-              <li key={index} className="text-gray-700">• {String(item)}</li>
+              <li key={index} className="text-gray-700 dark:text-gray-200">• {String(item)}</li>
             );
           })}
         </ul>
@@ -52,12 +52,12 @@ export function FieldDisplay({ data, fieldId, label, className = '' }: FieldDisp
   if (typeof value === 'object' && value !== null) {
     return (
       <div className={className}>
-        {label && <h3 className="font-bold text-blue-900 mb-2">{label}</h3>}
-        <div className="bg-white p-4 rounded-lg shadow-sm">
+        {label && <h3 className="font-bold text-blue-900 dark:text-blue-300 mb-2">{label}</h3>}
+        <div className="bg-white/50 dark:bg-slate-700/50 backdrop-blur-sm p-4 rounded-lg shadow-sm">
           {Object.entries(value).map(([key, val]) => (
             <div key={key} className="mb-2">
-              <span className="font-semibold text-gray-700">{key}: </span>
-              <span className="text-gray-700">{String(val)}</span>
+              <span className="font-semibold text-gray-700 dark:text-gray-200">{key}: </span>
+              <span className="text-gray-700 dark:text-gray-200">{String(val)}</span>
             </div>
           ))}
         </div>
@@ -69,9 +69,9 @@ export function FieldDisplay({ data, fieldId, label, className = '' }: FieldDisp
   if (typeof value === 'string' && (value.includes('<iframe') || value.includes('<script') || value.includes('embed'))) {
     return (
       <div className={className}>
-        {label && <h3 className="font-bold text-blue-900 mb-2">{label}</h3>}
-        <div 
-          className="text-gray-700"
+        {label && <h3 className="font-bold text-blue-900 dark:text-blue-300 mb-2">{label}</h3>}
+        <div
+          className="text-gray-700 dark:text-gray-200"
           dangerouslySetInnerHTML={{ __html: value }}
         />
       </div>
@@ -81,8 +81,8 @@ export function FieldDisplay({ data, fieldId, label, className = '' }: FieldDisp
   // 文字列・数値などの基本型の場合
   return (
     <div className={className}>
-      {label && <h3 className="font-bold text-blue-900 mb-2">{label}</h3>}
-      <p className="text-gray-700">{String(value)}</p>
+      {label && <h3 className="font-bold text-blue-900 dark:text-blue-300 mb-2">{label}</h3>}
+      <p className="text-gray-700 dark:text-gray-200">{String(value)}</p>
     </div>
   );
 }
@@ -94,9 +94,9 @@ export function FieldDisplay({ data, fieldId, label, className = '' }: FieldDisp
 export function AllFieldsDisplay({ data }: { data: ClinicInfo }) {
   // システムフィールドを除外
   const systemFields = ['id', 'createdAt', 'updatedAt', 'publishedAt', 'revisedAt'];
-  
+
   const customFields = Object.keys(data).filter(key => !systemFields.includes(key));
-  
+
   if (customFields.length === 0) {
     return (
       <div className="bg-yellow-50 p-4 rounded-lg">
@@ -119,4 +119,3 @@ export function AllFieldsDisplay({ data }: { data: ClinicInfo }) {
     </div>
   );
 }
-

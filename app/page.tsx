@@ -137,7 +137,7 @@ export default async function Home() {
                 </Link>
                 <Link
                   href="/examination"
-                  className="inline-flex justify-center items-center rounded-full bg-white border border-border px-8 py-4 text-base font-bold text-secondary shadow-sm transition-all hover:bg-background-alt hover:border-primary/30 focus:outline-none focus:ring-2 focus:ring-border focus:ring-offset-2"
+                  className="inline-flex justify-center items-center rounded-full bg-white border border-border px-8 py-4 text-base font-bold text-slate-900 shadow-sm transition-all hover:bg-background-alt hover:border-primary/30 focus:outline-none focus:ring-2 focus:ring-border focus:ring-offset-2"
                 >
                   検査・読影の体制
                 </Link>
@@ -388,7 +388,7 @@ export default async function Home() {
                   : '';
 
                 return (
-                  <Link key={item.id} href={`/news/${item.id}`} className="group block bg-white rounded-xl border border-border p-6 hover:shadow-md hover:border-primary/50 transition-all">
+                  <Link key={item.id} href={`/news/${item.id}`} className="group block bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl border border-border p-6 hover:shadow-md hover:border-primary/50 transition-all">
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-xs font-bold text-foreground-muted">{displayDate}</span>
                       {item.category && (
