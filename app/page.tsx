@@ -297,7 +297,7 @@ export default async function Home() {
 
             <div className="grid gap-8 md:grid-cols-4 relative z-10">
               {flow.map((step, index) => (
-                <div key={index} className="bg-white p-6 rounded-2xl border border-border shadow-sm text-center group hover:-translate-y-1 transition-transform duration-300">
+                <div key={index} className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-6 rounded-2xl border border-border shadow-sm text-center group hover:-translate-y-1 transition-transform duration-300">
                   <div className="w-12 h-12 mx-auto bg-primary text-white rounded-full flex items-center justify-center text-xl font-bold mb-4 shadow-lg shadow-sky-100 group-hover:scale-110 transition-transform">
                     {index + 1}
                   </div>
@@ -315,7 +315,7 @@ export default async function Home() {
       {/* Doctor Section */}
       <section className="py-20 bg-slate-50/50 dark:bg-slate-800/50 backdrop-blur-md">
         <div className="container mx-auto px-4">
-          <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-border overflow-hidden">
+          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-3xl p-8 md:p-12 shadow-xl border border-border overflow-hidden">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div className="order-2 md:order-1">
                 <span className="text-primary font-bold tracking-wider text-sm uppercase">Doctor</span>

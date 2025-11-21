@@ -25,25 +25,24 @@ export default function Header() {
   };
 
   return (
-    <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'bg-white/90 backdrop-blur-md shadow-sm py-3' 
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+          ? 'bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm py-3'
           : 'bg-transparent py-5'
-      }`}
+        }`}
     >
       <nav className="container mx-auto px-4">
         <div className="flex items-center justify-between">
-          <Link 
-            href="/" 
-            className="flex items-center gap-2 group" 
+          <Link
+            href="/"
+            className="flex items-center gap-2 group"
             onClick={closeMenu}
           >
             <span className="text-xl md:text-2xl font-bold text-secondary tracking-tight group-hover:text-primary transition-colors">
               せき専門外来
             </span>
           </Link>
-          
+
           {/* Mobile Menu Button */}
           <button
             onClick={toggleMenu}
@@ -72,8 +71,8 @@ export default function Header() {
               { label: 'アクセス', href: '/access' },
             ].map((item) => (
               <li key={item.href}>
-                <Link 
-                  href={item.href} 
+                <Link
+                  href={item.href}
                   className="text-sm font-medium text-secondary hover:text-primary transition-colors relative after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-0 after:h-[2px] after:bg-primary after:transition-all hover:after:w-full"
                 >
                   {item.label}
@@ -81,8 +80,8 @@ export default function Header() {
               </li>
             ))}
             <li>
-              <Link 
-                href="/access" 
+              <Link
+                href="/access"
                 className="inline-block px-5 py-2 bg-primary text-white text-sm font-bold rounded-full shadow-md hover:bg-primary-dark transition-all transform hover:-translate-y-0.5"
               >
                 予約・お問い合わせ
@@ -92,12 +91,11 @@ export default function Header() {
         </div>
 
         {/* Mobile Menu */}
-        <div 
-          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            isMenuOpen ? 'max-h-screen opacity-100 mt-4' : 'max-h-0 opacity-0'
-          }`}
+        <div
+          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${isMenuOpen ? 'max-h-screen opacity-100 mt-4' : 'max-h-0 opacity-0'
+            }`}
         >
-          <ul className="flex flex-col space-y-2 bg-white rounded-2xl p-4 shadow-lg border border-border">
+          <ul className="flex flex-col space-y-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-2xl p-4 shadow-lg border border-border">
             {[
               { label: 'ホーム', href: '/' },
               { label: '当院について', href: '/about' },
@@ -107,8 +105,8 @@ export default function Header() {
               { label: 'アクセス', href: '/access' },
             ].map((item) => (
               <li key={item.href}>
-                <Link 
-                  href={item.href} 
+                <Link
+                  href={item.href}
                   className="block px-4 py-3 text-secondary hover:bg-background-soft hover:text-primary rounded-xl transition-colors font-medium"
                   onClick={closeMenu}
                 >
