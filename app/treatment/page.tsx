@@ -69,12 +69,12 @@ export default async function TreatmentPage() {
                               <span><strong>菌の同定</strong>：MAC菌、カンサシ菌など、菌の種類によって治療方針が異なるため、正確に種類を特定します。</span>
                             </li>
                           </ul>
-                          <div className="relative h-48 rounded-xl overflow-hidden border border-slate-200">
+                          <div className="relative h-48 rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
                             <CMSImage
                               imageField={clinicInfo.NTMpicture1}
                               alt="喀痰検査・培養の様子"
                               fieldName="NTMpicture1"
-                              className="object-cover"
+                              className="object-contain w-full h-full"
                             />
                           </div>
                         </div>
@@ -120,8 +120,8 @@ export default async function TreatmentPage() {
 
                         <div className="bg-slate-50 rounded-2xl p-6">
                           <h4 className="font-bold text-slate-800 mb-4">治療のスケジュール</h4>
-                          <div className="mb-6 relative h-48 md:h-64 rounded-xl overflow-hidden border border-slate-200 bg-white">
-                            <img src="/images/ntm_timeline_large.png" alt="治療タイムライン" className="object-contain w-full h-full" />
+                          <div className="mb-6 rounded-xl overflow-hidden border border-slate-200 bg-white">
+                            <img src="/images/ntm_timeline_large.png" alt="治療タイムライン" className="w-full h-auto" />
                           </div>
                           <ul className="space-y-2 text-sm text-slate-600">
                             <li className="flex items-start">
