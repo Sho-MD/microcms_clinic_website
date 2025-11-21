@@ -1,6 +1,10 @@
 import Link from 'next/link';
+import { fetchClinicInfo } from '../../microcms';
+import CMSImage from '../components/CMSImage';
 
-export default function TreatmentPage() {
+export default async function TreatmentPage() {
+  const clinicInfo = await fetchClinicInfo();
+
   return (
     <main className="min-h-screen bg-white">
       <section className="bg-gradient-to-br from-sky-50 via-white to-sky-100">
@@ -34,6 +38,9 @@ export default function TreatmentPage() {
                       結核菌以外の「抗酸菌」という細菌による感染症です。近年、中高年の女性を中心に患者数が増加しています。
                       人から人へは感染しませんが、進行すると肺の機能が低下するため、適切な診断と治療が必要です。
                     </p>
+                    <p className="text-xs text-slate-500 mt-2">
+                      ※NTM: Nontuberculous Mycobacteria（非結核性抗酸菌）
+                    </p>
                   </div>
 
                   <div className="p-6 md:p-8 space-y-8">
@@ -63,7 +70,12 @@ export default function TreatmentPage() {
                             </li>
                           </ul>
                           <div className="relative h-48 rounded-xl overflow-hidden border border-slate-200">
-                            <img src="/images/ntm_diagnosis.png" alt="診断の流れ" className="object-cover w-full h-full" />
+                            <CMSImage
+                              imageField={clinicInfo.NTMpicture1}
+                              alt="喀痰検査・培養の様子"
+                              fieldName="NTMpicture1"
+                              className="object-cover"
+                            />
                           </div>
                         </div>
                       </div>
@@ -76,10 +88,16 @@ export default function TreatmentPage() {
                         治療について
                       </h3>
                       <div className="space-y-6">
-                        <p className="text-slate-700">
-                          日本の最新ガイドラインに基づき、以下の3剤を併用する標準治療を行います。
-                          治療期間は長期にわたりますが、根気強く続けることが完治への近道です。
-                        </p>
+                        <div className="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                          <p className="text-slate-800 font-semibold mb-2">
+                            最も多い「MAC症（マック症）」の場合
+                          </p>
+                          <p className="text-sm text-slate-700">
+                            日本の最新ガイドラインに基づき、以下の3剤を併用する標準治療を行います。
+                            <br />
+                            <span className="text-xs text-slate-500">※MAC症：Mycobacterium avium complex症。NTMの中で最も頻度の高い疾患です。</span>
+                          </p>
+                        </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                           <div className="bg-white border border-slate-200 rounded-xl p-4 text-center shadow-sm">
@@ -96,10 +114,14 @@ export default function TreatmentPage() {
                           </div>
                         </div>
 
+                        <p className="text-sm text-slate-600">
+                          ※カンサシ菌など、他の菌種の場合は、それぞれの菌に有効な別の薬剤を使用します。
+                        </p>
+
                         <div className="bg-slate-50 rounded-2xl p-6">
                           <h4 className="font-bold text-slate-800 mb-4">治療のスケジュール</h4>
-                          <div className="mb-6 relative h-40 md:h-48 rounded-xl overflow-hidden border border-slate-200 bg-white">
-                            <img src="/images/ntm_timeline.png" alt="治療タイムライン" className="object-contain w-full h-full" />
+                          <div className="mb-6 relative h-48 md:h-64 rounded-xl overflow-hidden border border-slate-200 bg-white">
+                            <img src="/images/ntm_timeline_large.png" alt="治療タイムライン" className="object-contain w-full h-full" />
                           </div>
                           <ul className="space-y-2 text-sm text-slate-600">
                             <li className="flex items-start">
