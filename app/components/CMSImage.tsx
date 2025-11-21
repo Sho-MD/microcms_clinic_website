@@ -4,6 +4,7 @@ type CMSImageProps = {
   imageField: unknown;
   alt: string;
   fieldName: string;
+  className?: string;
 };
 
 const resolveImageUrl = (imageField: unknown): string | null => {
@@ -18,7 +19,7 @@ const resolveImageUrl = (imageField: unknown): string | null => {
   return null;
 };
 
-export default function CMSImage({ imageField, alt, fieldName }: CMSImageProps) {
+export default function CMSImage({ imageField, alt, fieldName, className }: CMSImageProps) {
   const url = resolveImageUrl(imageField);
 
   if (url) {
@@ -28,13 +29,13 @@ export default function CMSImage({ imageField, alt, fieldName }: CMSImageProps) 
         alt={alt}
         fill
         sizes="(max-width: 768px) 100vw, 50vw"
-        className="object-cover"
+        className={`object-cover ${className || ''}`}
       />
     );
   }
 
   return (
-    <div className="flex h-full w-full items-center justify-center bg-slate-200 text-xs text-slate-500">
+    <div className={`flex h-full w-full items-center justify-center bg-slate-200 text-xs text-slate-500 ${className || ''}`}>
       {fieldName}（microCMS）に画像を設定すると表示されます。
     </div>
   );

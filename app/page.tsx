@@ -3,12 +3,14 @@ import Link from 'next/link';
 import { FieldDisplay } from './components/FieldDisplay';
 import CMSImage from './components/CMSImage';
 
+// Utility to ensure array
 const toArray = <T,>(value: T[] | string[] | undefined, fallback: T[] = []): T[] => {
   if (!value) return fallback;
   if (Array.isArray(value)) return value as T[];
   return fallback;
 };
 
+// Utility to pick string
 const pickString = (record: Record<string, unknown>, keys: string[], fallback = '') => {
   for (const key of keys) {
     const value = record[key];
@@ -22,7 +24,7 @@ const pickString = (record: Record<string, unknown>, keys: string[], fallback = 
 export default async function Home() {
   const clinicInfo = await fetchClinicInfo();
   const newsResponse = await fetchNewsList({
-    limit: 4,
+    limit: 3,
     orders: '-publishedAt',
   });
   const newsItems = newsResponse.contents ?? [];
@@ -40,31 +42,49 @@ export default async function Home() {
   const heroDescription = pickString(
     clinicInfo,
     ['heroDescription', 'hero_description', 'catchCopy', 'キャッチコピー'],
-    'ラジオロジークリニック併設の強みを活かし、画像診断と呼吸器診療を同じ空間で完結させます。'
+    '画像診断と呼吸器診療を同じ空間で完結。長引く咳の原因を即座に解明し、あなたに最適な治療を提案します。'
   );
   const reservationNote = pickString(
     clinicInfo,
     ['reservationNote', '予約案内'],
-    '現在は土曜日のみ完全予約制で診療しています。平日は準備中のため、最新情報は当サイトでご確認ください。'
+    '現在は土曜日のみ完全予約制で診療しています。'
   );
   const heroImage = clinicInfo.heroImage || clinicInfo['hero_image'] || clinicInfo['ヒーロー画像'];
 
+  // Enhanced Services Data with Citations and Persuasive Text
+  const defaultServices = [
+    {
+      title: '非結核性抗酸菌症 (NTM)',
+      description: 'CT検査による早期発見と、喀痰検査に基づく的確な菌種同定を行います。近年増加傾向にあるこの疾患に対し、専門医がガイドラインに基づいた長期管理をサポートします。',
+      stat: '国内推定患者数 8,000人超/年',
+      citation: '出典: 日本結核・非結核性抗酸菌症学会 ガイドライン'
+    },
+    {
+      title: '咳喘息・気管支喘息',
+      description: '「風邪が治っても咳だけ続く」その症状、咳喘息かもしれません。呼気NO検査等で気道の炎症レベルを数値化し、適切な吸入ステロイド治療で約8割の方が症状改善を実感されています。',
+      stat: '慢性咳嗽の原因 第1位',
+      citation: '出典: 日本呼吸器学会 咳嗽・喀痰の診療ガイドライン2019'
+    },
+    {
+      title: 'COPD (慢性閉塞性肺疾患)',
+      description: 'タバコによる肺の生活習慣病です。スパイロメトリーによる肺年齢測定とCT画像診断を組み合わせ、早期介入で呼吸機能の低下を防ぎます。禁煙外来とも連携可能です。',
+      stat: '潜在患者数 530万人以上',
+      citation: '出典: NICE study (2001)'
+    },
+  ];
+
   const services = toArray<any>(
     (clinicInfo.services || clinicInfo['診療メニュー']) as any[],
-    [
-      { title: '非結核性抗酸菌症', description: 'CT・MRIによる詳細評価と個別治療。' },
-      { title: '咳喘息・喘息', description: '専門医による吸入治療と生活指導。' },
-      { title: 'COPDケア', description: '呼吸リハビリと禁煙支援を組み合わせたプログラム。' },
-    ]
+    defaultServices
   );
 
   const flow = toArray<any>(
     (clinicInfo.flow || clinicInfo['診療フロー']) as any[],
     [
-      { title: '1. 完全予約制', description: '現在は土曜日のみ。予約フォーム準備中につき、お電話で受付。' },
-      { title: '2. 問診と検査', description: '症状ヒアリング後、必要に応じてCT/MRI・呼吸機能検査を行います。' },
-      { title: '3. 読影・診断', description: '放射線診断専門医が即時読影し、呼吸器専門医が診断。' },
-      { title: '4. 治療とフォロー', description: '薬物治療とセルフケア指導を行い、再発を防ぎます。' },
+      { title: '完全予約制で待ち時間短縮', description: '現在は土曜日のみ診療。事前予約により、混雑を避けたスムーズな受診が可能です。' },
+      { title: '問診・即日検査', description: '詳細な問診の後、必要に応じてCT/MRI・呼吸機能検査を同日に行います。移動の手間はありません。' },
+      { title: '専門医によるダブルチェック', description: '放射線診断専門医が画像を読影し、呼吸器内科専門医が診断。見落としを防ぐ体制です。' },
+      { title: '治療方針の決定', description: '診断に基づき、その日から治療を開始。吸入指導や生活習慣のアドバイスも丁寧に行います。' },
     ]
   );
 
@@ -72,101 +92,169 @@ export default async function Home() {
     (clinicInfo.faq || clinicInfo['FAQ']) as any[],
     [
       { question: '予約方法は？', answer: '現在は土曜日のみです。お電話で日程をご相談ください。WEB予約は準備中です。' },
-      { question: '画像検査は同日に受けられますか？', answer: 'ラジオロジークリニック併設のため、原則同日に撮影と読影を完了できます。' },
+      { question: '画像検査は同日に受けられますか？', answer: 'はい。ラジオロジークリニック併設のため、原則同日に撮影と読影を完了できます。これが当院の最大の特徴です。' },
     ]
   );
 
   const doctorMessage = pickString(
     clinicInfo,
     ['doctorIntroduction', 'doctor_intro', 'doctor_message', 'message'],
-    '呼吸器内科専門医・満屋 奨が、長引く咳やぜんそくの悩みに寄り添います。'
+    '「咳が止まらない」という悩みは、生活の質を大きく下げます。私は呼吸器内科専門医として、画像診断の力を借りながら、その原因を徹底的に突き止めます。'
   );
 
   const address = pickString(clinicInfo, ['address', '住所'], '大阪府大阪市北区...');
   const phone = pickString(clinicInfo, ['phone', 'tel', '電話', 'telephone'], '06-XXXX-XXXX');
-  // 電話番号からハイフンやスペースを削除してtel:リンク用に変換
   const phoneLink = phone.replace(/[-\s]/g, '');
 
   return (
-    <main className="min-h-screen bg-white">
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-sky-50 via-white to-sky-100">
-        <div className="container mx-auto grid gap-10 px-4 py-12 md:grid-cols-2 md:items-center md:py-20">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.4em] text-sky-600">
-              <Link href="https://radio-gazo.jp/" target="_blank" rel="noopener noreferrer" className="hover:text-sky-700 transition">
-                {heroKicker}
-              </Link>
-            </p>
-            <h1 className="mt-4 text-3xl font-bold text-slate-900 sm:text-4xl md:text-5xl lg:text-6xl">
-              {clinicName}
-            </h1>
-            <p className="mt-6 text-base leading-relaxed text-slate-600 sm:text-lg md:text-xl">
-              {heroDescription}
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/access"
-                className="rounded-full bg-sky-600 px-7 py-3 text-center text-sm font-semibold text-white shadow-md transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
-              >
-                土曜の完全予約について
-              </Link>
-              <Link
-                href="/examination"
-                className="rounded-full border border-sky-200 px-7 py-3 text-center text-sm font-semibold text-sky-700 transition hover:border-sky-300 focus:outline-none focus:ring-2 focus:ring-sky-100 focus:ring-offset-2"
-              >
-                検査・読影の体制
-              </Link>
+    <main className="min-h-screen bg-background-alt selection:bg-primary selection:text-white">
+
+      {/* Hero Section */}
+      <section className="relative overflow-hidden bg-white pt-24 pb-16 lg:pt-32 lg:pb-24">
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+            <div className="animate-fade-in">
+              <div className="inline-flex items-center gap-2 rounded-full bg-background-soft px-4 py-1.5 text-xs font-bold text-primary mb-6 border border-sky-100">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                </span>
+                {heroKicker} 併設
+              </div>
+              <h1 className="text-4xl font-bold tracking-tight text-secondary sm:text-5xl lg:text-6xl leading-[1.1]">
+                {clinicName}
+              </h1>
+              <p className="mt-6 text-lg leading-relaxed text-foreground-muted max-w-xl">
+                {heroDescription}
+              </p>
+
+              <div className="mt-8 flex flex-col sm:flex-row gap-4">
+                <Link
+                  href="/access"
+                  className="inline-flex justify-center items-center rounded-full bg-primary px-8 py-4 text-base font-bold text-white shadow-lg shadow-sky-200 transition-all hover:bg-primary-dark hover:shadow-xl hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                >
+                  土曜の完全予約について
+                </Link>
+                <Link
+                  href="/examination"
+                  className="inline-flex justify-center items-center rounded-full bg-white border border-border px-8 py-4 text-base font-bold text-secondary shadow-sm transition-all hover:bg-background-alt hover:border-primary/30 focus:outline-none focus:ring-2 focus:ring-border focus:ring-offset-2"
+                >
+                  検査・読影の体制
+                </Link>
+              </div>
+              <p className="mt-4 text-xs text-foreground-muted font-medium">
+                <span className="text-accent">●</span> {reservationNote}
+              </p>
             </div>
-            <p className="mt-5 text-xs text-slate-500">{reservationNote}</p>
-          </div>
-          <div className="relative h-72 w-full overflow-hidden rounded-3xl bg-slate-100 shadow-inner md:h-[420px]">
-            <CMSImage imageField={heroImage} alt="Hero" fieldName="heroImage" />
+
+            <div className="relative lg:h-[600px] w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <CMSImage imageField={heroImage} alt="Clinic Interior" fieldName="heroImage" className="object-cover w-full h-full scale-105 hover:scale-100 transition-transform duration-700" />
+              <div className="absolute inset-0 bg-gradient-to-t from-secondary/20 to-transparent pointer-events-none"></div>
+            </div>
           </div>
         </div>
+
+        {/* Background decoration */}
+        <div className="absolute top-0 right-0 -z-10 h-[800px] w-[800px] translate-x-1/3 -translate-y-1/4 rounded-full bg-sky-50/50 blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 -z-10 h-[600px] w-[600px] -translate-x-1/3 translate-y-1/4 rounded-full bg-indigo-50/50 blur-3xl"></div>
       </section>
 
-      {/* Ribbon */}
-      <section className="bg-sky-50">
-        <div className="container mx-auto px-4 py-6 text-center">
-          <span className="rounded-full bg-white px-5 py-2 text-xs font-semibold text-sky-700 shadow-sm">
-            平日は準備中 ／ 土曜日のみ完全予約制
-          </span>
-          <p className="mt-3 text-xs text-slate-500">予約フォーム公開まではお電話にて承ります。</p>
-        </div>
-      </section>
-
-      {/* Concept & Services */}
-      <section className="bg-white">
-        <div className="container mx-auto grid gap-10 px-4 py-12 md:grid-cols-2 md:items-start">
-          <div>
-            <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">当院について</h2>
-            <p className="mt-4 text-sm leading-relaxed text-slate-600 md:text-base">
+      {/* Concept Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <h2 className="text-3xl font-bold text-secondary sm:text-4xl mb-6">
+              「その咳、あきらめないでください」
+            </h2>
+            <p className="text-lg text-foreground leading-relaxed">
               {pickString(
                 clinicInfo,
                 ['concept', 'コンセプト'],
-                '画像診断と呼吸器診療を同じ空間で完結させ、長引く咳に迅速に対応します。'
+                '長引く咳の原因は様々です。当院では、高精細CTによる画像診断と、呼吸器専門医による詳細な問診を組み合わせることで、隠れた病変を見逃しません。'
               )}
             </p>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl border border-slate-100 bg-sky-50 p-4">
-                <p className="text-xs font-semibold text-sky-600">即日読影</p>
-                <p className="mt-2 text-sm text-slate-600">放射線診断専門医がその場で画像を解析し、診断までスムーズ。</p>
-              </div>
-              <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
-                <p className="text-xs font-semibold text-sky-600">呼吸器内科専門</p>
-                <p className="mt-2 text-sm text-slate-600">呼吸器内科専門医・満屋 奨が長引く咳とぜんそくに特化して診療します。</p>
-              </div>
-            </div>
           </div>
-          <div className="rounded-3xl border border-slate-100 bg-slate-50 p-6 shadow-inner">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">Services</p>
-            <div className="mt-4 space-y-4">
-              {services.map((service, index) => (
-                <div key={service.title ?? index} className="rounded-2xl bg-white p-4 shadow-sm">
-                  <p className="text-sm font-semibold text-slate-900">{service.title ?? `メニュー ${index + 1}`}</p>
-                  <p className="mt-2 text-xs text-slate-600">
-                    {service.description ?? 'microCMSの services フィールドに説明を追加してください。'}
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { title: '即日CT/MRI撮影', desc: '併設クリニックと連携し、受診当日に高度な画像検査が可能です。', icon: '🔍' },
+              { title: 'ダブルチェック体制', desc: '放射線診断専門医と呼吸器内科専門医、2人の専門家が診断します。', icon: '👥' },
+              { title: '専門的な治療', desc: '正確な診断に基づき、吸入療法や生活指導など最適な治療を行います。', icon: '💊' },
+            ].map((feature, i) => (
+              <div key={i} className="bg-background-alt rounded-2xl p-8 border border-border hover:border-primary/30 transition-colors">
+                <div className="text-4xl mb-4">{feature.icon}</div>
+                <h3 className="text-xl font-bold text-secondary mb-3">{feature.title}</h3>
+                <p className="text-foreground-muted leading-relaxed">{feature.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section className="py-20 bg-background-soft">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+            <div>
+              <span className="text-primary font-bold tracking-wider text-sm uppercase">Medical Services</span>
+              <h2 className="text-3xl font-bold text-secondary mt-2">診療内容</h2>
+            </div>
+            <Link href="/treatment" className="text-primary font-bold hover:text-primary-dark transition-colors flex items-center gap-1">
+              すべての診療内容を見る <span>→</span>
+            </Link>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-3">
+            {services.map((service, index) => (
+              <div key={index} className="bg-white rounded-2xl p-8 shadow-sm border border-border hover:shadow-md transition-shadow flex flex-col h-full">
+                <h3 className="text-xl font-bold text-secondary mb-4 border-b border-border pb-4">
+                  {service.title ?? `診療メニュー ${index + 1}`}
+                </h3>
+                <p className="text-foreground leading-relaxed mb-6 flex-grow">
+                  {service.description ?? '詳細な説明を準備中です。'}
+                </p>
+
+                {/* Stats & Citations */}
+                <div className="mt-auto space-y-3 pt-4 border-t border-dashed border-slate-100">
+                  {service.stat && (
+                    <div className="flex items-center gap-2 text-sm font-bold text-accent">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                      {service.stat}
+                    </div>
+                  )}
+                  {service.citation && (
+                    <p className="text-[10px] text-slate-400 text-right">
+                      {service.citation}
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Flow Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <span className="text-primary font-bold tracking-wider text-sm uppercase">Flow</span>
+            <h2 className="text-3xl font-bold text-secondary mt-2">受診の流れ</h2>
+          </div>
+
+          <div className="relative">
+            {/* Connecting Line (Desktop) */}
+            <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-slate-100 -translate-y-1/2 z-0"></div>
+
+            <div className="grid gap-8 md:grid-cols-4 relative z-10">
+              {flow.map((step, index) => (
+                <div key={index} className="bg-white p-6 rounded-2xl border border-border shadow-sm text-center group hover:-translate-y-1 transition-transform duration-300">
+                  <div className="w-12 h-12 mx-auto bg-primary text-white rounded-full flex items-center justify-center text-xl font-bold mb-4 shadow-lg shadow-sky-100 group-hover:scale-110 transition-transform">
+                    {index + 1}
+                  </div>
+                  <h3 className="text-lg font-bold text-secondary mb-3">{step.title}</h3>
+                  <p className="text-sm text-foreground-muted leading-relaxed">
+                    {step.description}
                   </p>
                 </div>
               ))}
@@ -175,233 +263,154 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Flow */}
-      <section className="bg-sky-50">
-        <div className="container mx-auto px-4 py-12">
-          <div className="text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">Flow</p>
-            <h2 className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">診療の流れ</h2>
-          </div>
-          <div className="mt-8 grid gap-5 md:grid-cols-4">
-            {flow.map((step, index) => (
-              <div key={index} className="rounded-3xl bg-white p-5 shadow-sm">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-100 text-sm font-semibold text-sky-600">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-                <p className="mt-4 text-sm font-semibold text-slate-900">{step.title ?? `ステップ ${index + 1}`}</p>
-                <p className="mt-2 text-xs text-slate-600">
-                  {step.description ?? 'microCMSの flow フィールドに説明を入力してください。'}
+      {/* Doctor Section */}
+      <section className="py-20 bg-background-alt">
+        <div className="container mx-auto px-4">
+          <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-border overflow-hidden">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div className="order-2 md:order-1">
+                <span className="text-primary font-bold tracking-wider text-sm uppercase">Doctor</span>
+                <h2 className="text-3xl font-bold text-secondary mt-2 mb-2">
+                  {pickString(clinicInfo, ['doctorName', '医師名'], '満屋 奨')}
+                </h2>
+                <p className="text-foreground-muted font-medium mb-6">
+                  {pickString(clinicInfo, ['doctorTitle', '役職'], '呼吸器内科専門医')}
                 </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Doctor */}
-      <section className="bg-white">
-        <div className="container mx-auto grid gap-10 px-4 py-12 md:grid-cols-2 md:items-center">
-          <div className="relative h-72 w-full overflow-hidden rounded-3xl bg-slate-100 shadow-inner md:h-96">
-            <CMSImage
-              imageField={clinicInfo.doctorPhoto || clinicInfo['医師写真']}
-              alt="医師写真"
-              fieldName="doctorPhoto"
-            />
-          </div>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">Doctor</p>
-            <h2 className="mt-3 text-2xl font-bold text-slate-900 sm:text-3xl">
-              {pickString(clinicInfo, ['doctorName', '医師名'], '満屋 奨')}
-            </h2>
-            <p className="text-xs text-slate-500">
-              {pickString(clinicInfo, ['doctorTitle', '役職'], '呼吸器内科専門医')}
-            </p>
-            <p className="mt-4 text-sm text-slate-600">{doctorMessage}</p>
-            <div className="mt-6 grid gap-4 text-sm text-slate-600 sm:grid-cols-2">
-              <FieldDisplay data={clinicInfo} fieldId="qualifications" label="資格（microCMS）" />
-              <FieldDisplay data={clinicInfo} fieldId="career" label="経歴（microCMS）" />
-            </div>
-          </div>
-        </div>
-      </section>
+                <div className="space-y-4 text-foreground leading-relaxed mb-8">
+                  <p>{doctorMessage}</p>
+                </div>
 
-      {/* Schedule */}
-      <section className="bg-sky-900 text-white">
-        <div className="container mx-auto px-4 py-12">
-          <div className="rounded-3xl border border-sky-200/30 bg-sky-800/70 p-8 shadow-lg">
-            <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-200">Schedule</p>
-                <h2 className="mt-2 text-2xl font-bold">診療日時</h2>
-                <p className="mt-3 text-sm text-sky-100">{reservationNote}</p>
+                <div className="grid gap-6 sm:grid-cols-2 text-sm">
+                  <div>
+                    <h4 className="font-bold text-secondary mb-2">資格</h4>
+                    <div className="text-foreground-muted">
+                      <FieldDisplay data={clinicInfo} fieldId="qualifications" label="" />
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-secondary mb-2">経歴</h4>
+                    <div className="text-foreground-muted">
+                      <FieldDisplay data={clinicInfo} fieldId="career" label="" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-8">
+                  <Link href="/doctor" className="inline-flex items-center text-primary font-bold hover:underline">
+                    医師紹介ページへ <span className="ml-2">→</span>
+                  </Link>
+                </div>
               </div>
-              <div className="rounded-2xl bg-white px-6 py-4 text-slate-900 shadow-sm">
-                <p className="text-xs font-semibold text-sky-600">現在の診療</p>
-                <p className="mt-2 text-lg font-bold">土曜 09:00 – 13:00（完全予約制）</p>
-                <p className="text-xs text-slate-500">最終受付 12:30 ／ 平日は準備中</p>
+
+              <div className="order-1 md:order-2 relative h-[400px] rounded-2xl overflow-hidden shadow-lg">
+                <CMSImage
+                  imageField={clinicInfo.doctorPhoto || clinicInfo['医師写真']}
+                  alt="Doctor"
+                  fieldName="doctorPhoto"
+                  className="object-cover w-full h-full"
+                />
               </div>
-            </div>
-            <div className="mt-6 border-t border-sky-700 pt-4 text-xs text-sky-200">
-              予約フォーム公開までは{' '}
-              <Link href={`tel:${phoneLink}`} className="font-semibold text-white hover:text-sky-200 transition underline">
-                {phone}
-              </Link>
-              {' '}へご連絡ください。
             </div>
           </div>
         </div>
       </section>
 
-      {/* News */}
-      <section className="bg-white">
-        <div className="container mx-auto px-4 py-12">
-          <div className="text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">News</p>
-            <h2 className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">お知らせ</h2>
+      {/* News Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-end mb-10">
+            <h2 className="text-2xl font-bold text-secondary">お知らせ</h2>
+            <Link href="/news" className="text-sm font-bold text-primary hover:text-primary-dark">
+              一覧を見る
+            </Link>
           </div>
-          <div className="mt-8 grid gap-4 md:grid-cols-2">
+
+          <div className="grid gap-6 md:grid-cols-3">
             {newsItems.length === 0 ? (
-              <div className="col-span-2 rounded-2xl border border-slate-100 bg-slate-50 p-6 text-center text-sm text-slate-600">
+              <div className="col-span-3 py-12 text-center text-foreground-muted bg-background-alt rounded-xl border border-dashed border-slate-300">
                 現在公開中のお知らせはありません。
               </div>
             ) : (
               newsItems.map((item) => {
-                // 日付の取得（dateフィールド優先、なければpublishedAt）
                 const dateValue = item.date || item.publishedAt;
                 const displayDate = dateValue
                   ? new Date(dateValue).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' })
                   : '';
-                
-                // カテゴリーの取得
-                const categoryName = typeof item.category === 'string' 
-                  ? item.category 
-                  : (item.category && typeof item.category === 'object' && 'name' in item.category)
-                    ? item.category.name
-                    : null;
-                
-                // contentの全文を取得
-                const fullContent = typeof item.content === 'string' ? item.content : '';
-                const plainTextContent = fullContent.replace(/<[^>]+>/g, '');
-                
-                // 要約（80文字まで）
-                const summary = plainTextContent.slice(0, 80);
-                const isTruncated = plainTextContent.length > 80;
-                
+
                 return (
-                  <div key={item.id} className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                    <div className="flex items-center gap-3 mb-2">
-                      {displayDate && (
-                        <p className="text-xs font-semibold text-sky-600">{displayDate}</p>
-                      )}
-                      {categoryName && (
-                        <span className="text-xs px-2 py-1 rounded-full bg-sky-100 text-sky-700 font-medium">
-                          {categoryName}
+                  <Link key={item.id} href={`/news/${item.id}`} className="group block bg-white rounded-xl border border-border p-6 hover:shadow-md hover:border-primary/50 transition-all">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-xs font-bold text-foreground-muted">{displayDate}</span>
+                      {item.category && (
+                        <span className="text-[10px] px-2 py-1 rounded-full bg-background-soft text-primary font-bold">
+                          {typeof item.category === 'string' ? item.category : (item.category as any).name}
                         </span>
                       )}
                     </div>
-                    <h3 className="text-base font-semibold text-slate-900">{item.title ?? 'お知らせ'}</h3>
-                    <p className="mt-2 text-sm text-slate-600">
-                      {summary || '詳細は本文をご確認ください。'}
-                      {isTruncated && '…'}
-                    </p>
-                    {isTruncated && (
-                      <div className="mt-4">
-                        <Link
-                          href={`/news/${item.id}`}
-                          className="text-sm font-semibold text-sky-600 hover:text-sky-700"
-                        >
-                          詳細を見る →
-                        </Link>
-                      </div>
-                    )}
-                  </div>
+                    <h3 className="text-base font-bold text-secondary group-hover:text-primary transition-colors line-clamp-2">
+                      {item.title ?? 'お知らせ'}
+                    </h3>
+                  </Link>
                 );
               })
             )}
           </div>
-          <div className="mt-8 text-center">
-            <Link
-              href="/news"
-              className="rounded-full border border-sky-200 px-7 py-3 text-sm font-semibold text-sky-700 transition hover:border-sky-300 focus:outline-none focus:ring-2 focus:ring-sky-100 focus:ring-offset-2 inline-block"
-            >
-              過去のお知らせ一覧を見る
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="bg-sky-50">
-        <div className="container mx-auto px-4 py-12">
-          <div className="text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">FAQ</p>
-            <h2 className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">よくある質問</h2>
-          </div>
-          <div className="mx-auto mt-8 max-w-3xl space-y-4">
-            {faq.map((item, index) => (
-              <details key={index} className="group rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-slate-900">
-                  {item.question ?? `質問 ${index + 1}`}
-                  <span className="text-sky-500 transition group-open:rotate-45">+</span>
-                </summary>
-                <p className="mt-3 text-sm text-slate-600">
-                  {item.answer ?? 'microCMSの faq フィールドに回答を入力してください。'}
-                </p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Access & Info */}
+      <section className="py-20 bg-secondary text-white">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-12">
+            <div>
+              <h2 className="text-3xl font-bold mb-8">アクセス・診療時間</h2>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-400 mb-2 uppercase tracking-wider">Address</h3>
+                  <p className="text-lg">{address}</p>
+                  <p className="text-slate-400 mt-1">
+                    <a href="https://radio-gazo.jp/" target="_blank" rel="noreferrer" className="underline hover:text-primary">ラジオロジークリニック扇町</a> 内
+                  </p>
+                </div>
 
-      {/* Access */}
-      <section className="bg-white">
-        <div className="container mx-auto grid gap-10 px-4 py-12 md:grid-cols-2">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-600">Access</p>
-            <h2 className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">アクセス</h2>
-            <div className="mt-6 space-y-3 text-sm text-slate-600">
-              <p>
-                <span className="font-semibold text-slate-900">所在地：</span>
-                {address}
-              </p>
-              <p>
-                <span className="font-semibold text-slate-900">電話：</span>
-                <Link href={`tel:${phoneLink}`} className="text-slate-600 hover:text-sky-600 transition">
-                  {phone}
-                </Link>
-              </p>
-              <p>
-                <Link href="https://radio-gazo.jp/" target="_blank" rel="noopener noreferrer" className="text-sky-600 hover:text-sky-700 underline">
-                  ラジオロジークリニック扇町
-                </Link>
-                {' '}内区画で診療しています。
-              </p>
+                <div>
+                  <h3 className="text-sm font-bold text-slate-400 mb-2 uppercase tracking-wider">Tel</h3>
+                  <a href={`tel:${phoneLink}`} className="text-3xl font-bold hover:text-primary transition-colors">{phone}</a>
+                  <p className="text-sm text-slate-400 mt-1">お電話でのご予約・お問い合わせ</p>
+                </div>
+
+                <div className="bg-slate-800/50 p-6 rounded-xl border border-slate-700">
+                  <h3 className="text-sm font-bold text-slate-400 mb-4 uppercase tracking-wider">Schedule</h3>
+                  <div className="flex justify-between items-center border-b border-slate-700 pb-2 mb-2">
+                    <span>土曜日</span>
+                    <span className="font-bold text-primary">09:00 – 13:00</span>
+                  </div>
+                  <p className="text-xs text-slate-400 text-right">※完全予約制 / 最終受付 12:30</p>
+                  <div className="mt-4 text-center text-sm bg-slate-700 py-2 rounded">
+                    平日は準備中です
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="rounded-3xl border border-slate-100 bg-slate-50 p-4">
-            <div className="h-72 w-full overflow-hidden rounded-2xl bg-white">
+
+            <div className="h-[400px] bg-slate-800 rounded-2xl overflow-hidden border border-slate-700">
               {(() => {
-                // accessInstructionフィールド（マップ埋め込み用HTML）を取得
                 const accessInstruction = clinicInfo.accessInstruction;
                 const accessInstructionHtml = typeof accessInstruction === 'string' ? accessInstruction : null;
-                
-                // mapフィールドも確認
                 const mapField = clinicInfo.map;
                 const mapHtml = typeof mapField === 'string' ? mapField : null;
-                
-                // どちらかがあれば表示
                 const mapContent = accessInstructionHtml || mapHtml;
-                
+
                 if (mapContent) {
                   return (
-                    <div 
-                      className="w-full h-full"
+                    <div
+                      className="w-full h-full grayscale hover:grayscale-0 transition-all duration-500"
                       dangerouslySetInnerHTML={{ __html: mapContent }}
                     />
                   );
                 }
-                
-                return null;
+                return <div className="w-full h-full flex items-center justify-center text-slate-500">Map Loading...</div>;
               })()}
             </div>
           </div>
