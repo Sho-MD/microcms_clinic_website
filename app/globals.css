@@ -74,6 +74,22 @@
     /* Slate 50 - Light headings for dark mode */
     --border: #334155;
   }
+
+  /* Explicit overrides for Safari/iOS dark mode reliability */
+  .text-secondary {
+    color: #f8fafc;
+    /* Slate 50 */
+  }
+
+  .text-foreground {
+    color: #f1f5f9;
+    /* Slate 100 */
+  }
+
+  .text-foreground-muted {
+    color: #94a3b8;
+    /* Slate 400 */
+  }
 }
 
 body {
